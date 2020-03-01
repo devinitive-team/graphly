@@ -5,9 +5,8 @@ from core.reader import reader
 
 def main():
     print("Graphly!")
-    generator.generate()
-    plotter.plot()
-    reader.read("/path/filepath")
+    graph = reader.read("../examples/adjacency_list_graph.json.json")
+    # print(graph)
 
 
 if __name__ == "__main__":
