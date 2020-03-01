@@ -8,4 +8,4 @@ def create(data_format, vertices):
         "adjacency_matrix": adjacency_matrix,
         "adjacency_list": adjacency_list,
         "incidence_matrix": incidence_matrix,
-    }[data_format]()
+    }[data_format](vertices)
