@@ -1,7 +1,14 @@
+from core.generator import generator
+from core.plotter import plotter
+from core.reader import reader
+
+
 def main():
-    print("Graphly")
+    print("Graphly!")
+    generator.generate()
+    plotter.plot()
+    reader.read("/path/filepath")
 
 
 if __name__ == "__main__":
-    # execute only if run as a script
     main()
