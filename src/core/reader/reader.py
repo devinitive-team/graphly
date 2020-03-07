@@ -7,7 +7,7 @@ def read(filepath):
         data = json.load(json_file)
         data_format = data["format"]
         vertices = []
-        for vertex in data["vertices"]:
+        for vertex in data["data"]:
             vertices.append(vertex)
 
         return graph_factory.create(data_format, vertices)
