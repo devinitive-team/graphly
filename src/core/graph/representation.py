@@ -13,8 +13,8 @@ class adjacency_list(printable):
     def edges(self):
         return self.to_incidence_matrix().edges()
 
-    def vertices(self):
-        return self.to_incidence_matrix().vertices()
+    def nodes(self):
+        return self.to_incidence_matrix().nodes()
 
     def to_adjacency_matrix(self):
         matrix = [self.vertices_num * [0] for _ in range(self.vertices_num)]
@@ -52,8 +52,8 @@ class adjacency_matrix(printable):
     def edges(self):
         return self.to_incidence_matrix().edges()
 
-    def vertices(self):
-        return self.to_incidence_matrix().vertices()
+    def nodes(self):
+        return self.to_incidence_matrix().nodes()
 
     def to_adjacency_list(self):
         adj_list = []
@@ -90,8 +90,8 @@ class incidence_matrix(printable):
 
         return edges_list
 
-    def vertices(self):
-        return (i for i in range(self.vertices_num))
+    def nodes(self):
+        return [i for i in range(self.vertices_num)]
 
     def to_adjacency_list(self):
         adj_list = []

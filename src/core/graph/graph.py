@@ -12,5 +12,5 @@ class graph(printable):
     def edges(self):
         return self.graph_representation.edges()
 
-    def vertices(self):
-        return self.graph_representation.vertices()
+    def nodes(self):
+        return self.graph_representation.nodes()

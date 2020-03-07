@@ -8,5 +8,8 @@ def plot(graph):
     for edge in graph.edges():
         g.add_edge(edge[0], edge[1])
 
-    nx.draw_shell(g, with_labels=True)
+    for node in graph.nodes():
+        g.add_node(node)
+
+    nx.draw_circular(g, with_labels=True)
     plt.savefig("filename.png")
