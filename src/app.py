@@ -7,9 +7,6 @@ from core.graph.graph import graph
 def main():
     print("Graphly!")
 
-    # my_graph = generator.generate("normal", 1000, 100000)
-    # plotter.plot(my_graph)
-
     my_graph = generator.generate("probability", 25, 0.1)
     plotter.plot(my_graph)
 

@@ -12,4 +12,4 @@ def plot(graph):
         g.add_node(node)
 
     nx.draw_circular(g, with_labels=True)
-    plt.savefig("filename.png")
+    plt.savefig("graph.png")
