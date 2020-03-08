@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="graphly",
-    version="1.0.3",
+    version="1.0.4",
     author="devinitive",
     author_email="devinitive@placeholder.com",
     description="A small library for studying graphs",
@@ -15,7 +15,8 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         "networkx",
-        "matplotlib"
+        "matplotlib",
+        "scipy"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

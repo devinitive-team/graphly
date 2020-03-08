@@ -2,7 +2,7 @@ import scipy.special
 import random
 from itertools import combinations
 
-from graph import graph
+from graphly.graph import graph
 from graphly.representation.representation import adjacency_list
 
 
