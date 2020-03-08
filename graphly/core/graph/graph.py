@@ -1,4 +1,3 @@
-from core.graph.representation import *
 from core.interfaces.printable import printable
 
 

@@ -1,7 +1,7 @@
 from core.graph.representation import *
 
 
-def create(data_format, vertices):
+def create_graph(data_format, vertices):
     return {
         "adjacency_matrix": adjacency_matrix,
         "adjacency_list": adjacency_list,

@@ -1,5 +1,5 @@
 import json
-from core.factory import graph as graph_factory
+from core.factory import factory
 
 
 def read(filepath):
@@ -10,4 +10,4 @@ def read(filepath):
         for vertex in data["data"]:
             vertices.append(vertex)
 
-        return graph_factory.create(data_format, vertices)
+        return factory.create_graph(data_format, vertices)
