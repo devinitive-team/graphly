@@ -1,5 +1,5 @@
 import json
-from core.factory import factory
+from graphly.factory import factory
 
 
 def read(filepath):

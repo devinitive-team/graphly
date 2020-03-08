@@ -1,4 +1,4 @@
-from core.graph.representation import *
+from graphly.representation.representation import *
 
 
 def create_graph(data_format, vertices):

@@ -2,8 +2,8 @@ import scipy.special
 import random
 from itertools import combinations
 
-from core.graph.graph import graph
-from core.graph.representation import adjacency_list
+from graph import graph
+from graphly.representation.representation import adjacency_list
 
 
 def generate(generation_type, x, y):

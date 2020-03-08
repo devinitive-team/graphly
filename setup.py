@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="graphly-pkg-devinitive",
-    version="1.0.1",
+    version="1.0.2",
     author="devinitive",
     author_email="devinitive@placeholder.com",
     description="A small library for studying graphs",
