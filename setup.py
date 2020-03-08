@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="graphly-pkg-devinitive",
+    name="graphly-devinitive",
     version="1.0.2",
     author="devinitive",
     author_email="devinitive@placeholder.com",
@@ -13,6 +13,10 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/devinitive-team/graphly",
     packages=setuptools.find_packages(),
+    install_requires=[
+        "networkx",
+        "matplotlib"
+    ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
