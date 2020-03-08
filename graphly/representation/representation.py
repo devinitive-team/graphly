@@ -1,7 +1,4 @@
-from core.interfaces.printable import printable
-
-
-class adjacency_list(printable):
+class adjacency_list:
     def __init__(self, vertices):
         self.vertices = vertices
         self.vertices_num = len(vertices)
@@ -41,7 +38,7 @@ class adjacency_list(printable):
         return incidence_matrix(matrix)
 
 
-class adjacency_matrix(printable):
+class adjacency_matrix:
     def __init__(self, vertices):
         self.vertices = vertices
 
@@ -69,7 +66,7 @@ class adjacency_matrix(printable):
         return self.to_adjacency_list().to_incidence_matrix()
 
 
-class incidence_matrix(printable):
+class incidence_matrix:
     def __init__(self, vertices):
         self.vertices = vertices
         self.edges_num = len(self.vertices[0])
