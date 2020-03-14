@@ -1,4 +1,4 @@
-def degree_seq(sequence):
+def is_degree_seq(sequence):
     seq = sequence.copy()
 
     seq.sort(reverse=True)
