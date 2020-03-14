@@ -31,8 +31,11 @@ class graph:
     def print(self):
         self.graph_representation.print()
 
-    def plot(self):
-        plotter.plot(self)
+    def exchange_edges(self, edges):
+        self.graph_representation.exchange_edges(edges)
+
+    def plot(self, name="graph.png"):
+        plotter.plot(self, name)
 
     def edges(self):
         return self.graph_representation.edges()

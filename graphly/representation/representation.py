@@ -10,6 +10,21 @@ class adjacency_list:
     def edges(self):
         return self.to_incidence_matrix().edges()
 
+    def exchange_edges(self, edges):
+        if edges[1][1] not in self.vertices[edges[0][0]] and edges[1][0] not in self.vertices[edges[0][1]]:
+            self.vertices[edges[0][0]].append(edges[1][1])
+            self.vertices[edges[1][1]].append(edges[0][0])
+            self.vertices[edges[0][1]].append(edges[1][0])
+            self.vertices[edges[1][0]].append(edges[0][1])
+            self.vertices[edges[0][0]].remove(edges[0][1])
+            self.vertices[edges[1][1]].remove(edges[1][0])
+            self.vertices[edges[0][1]].remove(edges[0][0])
+            self.vertices[edges[1][0]].remove(edges[1][1])
+            for vert in self.vertices:
+                vert.sort()
+
+
+
     def nodes(self):
         return self.to_incidence_matrix().nodes()
 
@@ -49,6 +64,10 @@ class adjacency_matrix:
     def edges(self):
         return self.to_incidence_matrix().edges()
 
+    def exchange_edges(self, edges):
+        print(self.vertices)
+        print(edges)
+
     def nodes(self):
         return self.to_incidence_matrix().nodes()
 
@@ -86,6 +105,10 @@ class incidence_matrix:
             edges_list.append(current_edge)
 
         return edges_list
+
+    def exchange_edges(self, edges):
+        print(self.vertices)
+        print(edges)
 
     def nodes(self):
         return [i for i in range(self.vertices_num)]

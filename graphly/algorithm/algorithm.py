@@ -1,3 +1,7 @@
+import graphly.graph
+import random
+
+
 def is_degree_seq(sequence):
     seq = sequence.copy()
 
@@ -16,3 +20,40 @@ def is_degree_seq(sequence):
 
         seq[0] = 0
         seq.sort(reverse=True)
+
+
+def components_helper(nr, v, G, comp):
+    vert = G.nodes()
+    for n in vert:
+        if comp[n] == -1:
+            comp[n] = nr
+            components_helper(nr, n, G, comp)
+
+
+def components(graph):
+    nr = 0
+    vert = graph.nodes()
+    comp = [-1 for v in vert]
+    for v in vert:
+        if comp[v] == -1:
+            nr += 1
+            comp[v] = nr
+            components_helper(nr, v, graph, comp)
+    return comp
+
+
+def randomize_graph(graph, num):
+    for _ in range(num):
+        edges = graph.edges()
+        random_edges = random.choices(edges, k=2)
+        ready = False
+        while not ready:
+            for node in random_edges[0]:
+                if node in random_edges[1]:
+                    random_edges = random.choices(edges, k=2)
+                    ready = False
+                    break
+                else:
+                    ready = True
+
+        graph.exchange_edges(random_edges)
