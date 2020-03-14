@@ -13,8 +13,7 @@ def plot(graph, name="graph.png"):
     for edge in temp:
         g.add_edge(edge[0], edge[1])
 
-    print(g.nodes())
-    print(g.edges())
-
     nx.draw_circular(g, with_labels=True)
-    plt.savefig(name)
+
+    plt.savefig(name, format='png')
+    plt.clf()
