@@ -23,10 +23,14 @@ class adjacency_list:
             for vert in self.vertices:
                 vert.sort()
 
-
+    def edge_exists(self, first_node, second_node):
+        return self.to_adjacency_matrix().edge_exists(first_node, second_node)
 
     def nodes(self):
         return self.to_incidence_matrix().nodes()
+
+    def to_adjacency_list(self):
+        return self.vertices
 
     def to_adjacency_matrix(self):
         matrix = [self.vertices_num * [0] for _ in range(self.vertices_num)]
@@ -67,9 +71,16 @@ class adjacency_matrix:
     def exchange_edges(self, edges):
         print(self.vertices)
         print(edges)
+        raise Exception
+
+    def edge_exists(self, first_node, second_node):
+        return True if self.vertices[first_node][second_node] != 0 else False
 
     def nodes(self):
         return self.to_incidence_matrix().nodes()
+
+    def to_adjacency_matrix(self):
+        return self.vertices
 
     def to_adjacency_list(self):
         adj_list = []
@@ -109,9 +120,16 @@ class incidence_matrix:
     def exchange_edges(self, edges):
         print(self.vertices)
         print(edges)
+        raise Exception
+
+    def edge_exists(self, first_node, second_node):
+        return self.to_adjacency_matrix().edge_exists(first_node, second_node)
 
     def nodes(self):
         return [i for i in range(self.vertices_num)]
+
+    def to_incidence_matrix(self):
+        return self.vertices
 
     def to_adjacency_list(self):
         adj_list = []

@@ -1,5 +1,5 @@
-import graphly.graph
 import random
+import itertools
 
 
 def is_degree_seq(sequence):
@@ -57,3 +57,22 @@ def randomize_graph(graph, num):
                     ready = True
 
         graph.exchange_edges(random_edges)
+
+
+def is_hamiltonian(graph):
+    nodes = graph.nodes()
+    permutations = list(itertools.permutations(nodes))
+
+    graph.set_representation("adjacency_matrix")
+
+    for permutation in permutations:
+        valid = True
+        for i in range(len(permutation)):
+            if not graph.edge_exists(permutation[i], permutation[(i + 1) % len(permutation)]):
+                valid = False
+                break
+
+        if valid:
+            return True
+
+    return False

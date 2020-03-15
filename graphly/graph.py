@@ -40,5 +40,24 @@ class graph:
     def edges(self):
         return self.graph_representation.edges()
 
+    def edge_exists(self, first_node, second_node):
+        return self.graph_representation.edge_exists(first_node, second_node)
+
     def nodes(self):
         return self.graph_representation.nodes()
+
+    def set_representation(self, representation_string):
+        self.graph_representation = {
+            "adjacency_list": self.get_adjacency_list,
+            "adjacency_matrix": self.get_adjacency_matrix,
+            "incidence_matrix": self.get_incidence_matrix
+        }[representation_string]()
+
+    def get_adjacency_list(self):
+        return self.graph_representation.to_adjacency_list()
+
+    def get_adjacency_matrix(self):
+        return self.graph_representation.to_adjacency_matrix()
+
+    def get_incidence_matrix(self):
+        return self.graph_representation.to_incidence_matrix()
