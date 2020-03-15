@@ -9,7 +9,8 @@ from graphly.representation.representation import adjacency_list
 def generate(generation_type, x, y):
     return {
         "normal": generate_regular,
-        "probability": generate_probability
+        "probability": generate_probability,
+        "k-regular": generate_k_regular
     }[generation_type](x, y)
 
 
@@ -45,3 +46,63 @@ def generate_probability(vertices_num, probability):
             adj_list[edge_list[i][1]].append(edge_list[i][0])
 
     return graph(adjacency_list(adj_list))
+
+
+def generate_k_regular(n, k):  # n - number of vertices, k - regularity
+    # number of number * regularity must be even and regularity cannot be larger than number of vertices
+    if n * k % 2 != 0 or k >= n:
+        raise Exception("Wrong input numbers")
+
+    nk = n * k
+
+    adj_list = [[] for _ in range(n)]
+    points_org = [i % n for i in range(nk)]
+    points = points_org[:]
+    edge_list = []
+
+    response = 0
+
+    while True:
+        for i in range(nk // 2):
+            response = generate_random_pair(edge_list, points)  # 0 is ok, -1 is not ok
+            if response == -1:  # if response == -1 generating graph again
+                break
+        if response == 0:  # if response == 0 graph is finished
+            break
+
+        # resetting
+        edge_list = []
+        points = points_org[:]
+
+    for i in range(len(edge_list)):  # transform from list of edges to adjacency list
+        adj_list[edge_list[i][0]].append(edge_list[i][1])
+        adj_list[edge_list[i][1]].append(edge_list[i][0])
+
+    return graph(adjacency_list(adj_list))
+
+
+def generate_random_pair(edge_list, points):
+    loop_count = 0
+    point = points.pop(random.randrange(len(points)))
+
+    while True:
+        if loop_count > 10:  # to prevent inf loop
+            return -1
+        loop_count += 1
+
+        index = random.randrange(len(points))
+
+        if point == points[index]:
+            continue
+
+        edge = (point, points[index])
+        if edge in edge_list:
+            continue
+
+        reversed_edge_list = [t[::-1] for t in edge_list]
+        if edge in reversed_edge_list:
+            continue
+
+        points.pop(index)
+        edge_list.append(edge)
+        return 0
