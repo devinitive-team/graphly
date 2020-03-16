@@ -22,12 +22,13 @@ def is_degree_seq(sequence):
         seq.sort(reverse=True)
 
 
-def components_helper(nr, v, G, comp):
-    vert = G.nodes()
-    for n in vert:
-        if comp[n] == -1:
-            comp[n] = nr
-            components_helper(nr, n, G, comp)
+def components_helper(nr, v, graph, comp):
+    vert = graph.nodes()
+    for u in vert:
+        if graph.edge_exists(u, v):
+            if comp[u] == -1:
+                comp[u] = nr
+                components_helper(nr, u, graph, comp)
 
 
 def components(graph):
@@ -40,6 +41,22 @@ def components(graph):
             comp[v] = nr
             components_helper(nr, v, graph, comp)
     return comp
+
+
+def largest_component(graph):
+    component_array = components(graph)
+    num_of_components = max(component_array)
+
+    for i in range(1, num_of_components + 1):
+        print(f"{i}) ", end='')
+        for index, value in enumerate(component_array):
+            if i == value:
+                print(f"{index} ", end='')
+        print()
+
+    counted_components = dict((comp, component_array.count(comp)) for comp in component_array)
+    largest = max(counted_components, key=counted_components.get)
+    print(f"Largest component: {largest}")
 
 
 def randomize_graph(graph, num):
