@@ -46,6 +46,9 @@ class graph:
     def nodes(self):
         return self.graph_representation.nodes()
 
+    def vertices(self):
+        return self.graph_representation.vertices
+
     def set_representation(self, representation_string):
         self.graph_representation = {
             "adjacency_list": self.get_adjacency_list,

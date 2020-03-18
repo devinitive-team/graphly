@@ -113,8 +113,26 @@ def is_hamiltonian(graph):
 
 
 def is_connected(graph):
-    components_dict = largest_component(graph)
-    if len(components_dict) == 1:
-        return True
+    """
+    :param graph
+    :return: bool
+    """
+    component_array = components(graph)
+    return max(component_array) == 1
 
-    return False
+
+def is_eulerian(graph):
+    """
+    Graph is eulerian when graph is connected and all its vertices are of even degree.
+    :param graph
+    :return: bool
+    """
+    graph.set_representation("adjacency_list")
+    vertices_degree = []
+    for vertex in graph.vertices():
+        vertices_degree.append(len(vertex))
+
+    is_every_degree_even = all(degree % 2 == 0 for degree in vertices_degree)
+    return is_connected(graph) and is_every_degree_even
+
+# def find_eulerian_circut(graph):
