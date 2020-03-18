@@ -16,7 +16,8 @@ setuptools.setup(
     install_requires=[
         "networkx",
         "matplotlib",
-        "scipy"
+        "scipy",
+        "multidispatch"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

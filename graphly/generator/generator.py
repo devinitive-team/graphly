@@ -1,11 +1,30 @@
 import scipy.special
 import random
 from itertools import combinations
+from multipledispatch import dispatch
 
 from graphly.graph import graph
 from graphly.representation.representation import adjacency_list
+from graphly.algorithm import algorithm
 
 
+# function overloading doesn't work well in python...
+# I had to do it for api consistency
+@dispatch(str)
+def generate(generation_type):
+    return {
+        "eulerian": generate_eulerian
+    }[generation_type]()
+
+
+@dispatch(str, int)
+def generate(generation_type, x):
+    return {
+        "eulerian": generate_eulerian
+    }[generation_type](x)
+
+
+@dispatch(str, float, float)
 def generate(generation_type, x, y):
     return {
         "normal": generate_regular,
@@ -106,3 +125,20 @@ def generate_random_pair(edge_list, points):
         points.pop(index)
         edge_list.append(edge)
         return 0
+
+
+def generate_eulerian(vertices_num=random.randint(4, 50)):
+    """
+    :param vertices_num or nothing
+    :return: an eulerian graph
+    """
+    max_degree = vertices_num - 2 if vertices_num % 2 == 0 else vertices_num - 1
+
+    seq = []
+    for vertex in range(vertices_num):
+        seq.append(random.randrange(2, max_degree + 1, 2))  # all vertices of even degree
+
+    print(seq)
+
+    if algorithm.is_degree_seq(seq):
+        g = graph.from_degree_seq(seq)
