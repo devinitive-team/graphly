@@ -7,9 +7,6 @@ class adjacency_list:
         for i in range(len(self.vertices)):
             print(f"{i}: {self.vertices[i]}")
 
-    def copy(self):
-        return self.vertices.copy()
-
     def edges(self):
         return self.to_incidence_matrix().edges()
 
@@ -71,9 +68,6 @@ class adjacency_matrix:
         for i in range(len(self.vertices)):
             print(f"{i}: {self.vertices[i]}")
 
-    def copy(self):
-        return self.vertices.copy()
-
     def edges(self):
         return self.to_incidence_matrix().edges()
 
@@ -117,9 +111,6 @@ class incidence_matrix:
     def print(self):
         for i in range(len(self.vertices)):
             print(f"{i}: {self.vertices[i]}")
-
-    def copy(self):
-        return self.vertices.copy()
 
     def edges(self):
         edges_list = []

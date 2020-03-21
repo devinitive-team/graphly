@@ -1,5 +1,6 @@
 import random
 import itertools
+import copy
 
 
 def is_degree_seq(sequence):
@@ -145,12 +146,42 @@ def is_edge_bridge(graph, edge):
     if not is_connected(graph):
         raise Exception
 
-    graph_copy = graph.copy(graph)
+    graph_copy = copy.deepcopy(graph)
     graph_copy.remove_edge(edge)
     return not is_connected(graph_copy)
 
 
-def find_eulerian_circut(graph):
-    # graph.set_representation("incidence_matrix")
-    graph.remove_edge(2)
-    print(is_edge_bridge(graph, 4))
+def find_eulerian_circuit(graph):
+    """
+    :param graph
+    :return: eulerian circut as an array of integers
+    """
+    if not is_eulerian(graph):
+        raise Exception
+
+    graph.set_representation("incidence_matrix")
+
+    eulerian_circut = []
+    current_vertex = 0
+    current_edge = None
+
+    while any(graph.edges()):
+        print(current_vertex)
+        print(graph.vertices())
+        print(graph.edges())
+        eulerian_circut.append(current_vertex)
+        current_edge = graph.vertices()[current_vertex].index(1)
+        vertex_degree = graph.vertices()[current_vertex].count(1)
+        if not is_edge_bridge(graph, current_edge) or vertex_degree == 1:
+            vertex_1, vertex_2 = graph.edges()[current_edge]
+            current_vertex = vertex_1 if vertex_1 != current_vertex else vertex_2
+            graph.remove_edge(current_edge)
+        else:
+            print("other way")
+            break
+
+    print(current_vertex)
+    print(graph.vertices())
+    print(graph.edges())
+
+    return eulerian_circut
