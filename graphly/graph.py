@@ -42,6 +42,9 @@ class graph:
     def edges(self):
         return self.graph_representation.edges()
 
+    def remove_edge(self, edge):
+        return self.graph_representation.remove_edge(edge)
+
     def edge_exists(self, first_node, second_node):
         return self.graph_representation.edge_exists(first_node, second_node)
 
