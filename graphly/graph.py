@@ -1,3 +1,4 @@
+from operator import itemgetter
 from graphly.reader import reader
 from graphly.plotter import plotter
 from graphly.representation import representation
@@ -13,19 +14,18 @@ class graph:
 
     @classmethod
     def from_degree_seq(cls, sequence):
-        seq = sequence.copy()
+        seq = [[index, value] for index, value in enumerate(sequence)]
 
         adj_list = [[] for _ in range(len(seq))]
-        seq.sort(reverse=True)
-        for i in range(len(seq)):
-            counter = 0
+        for _ in range(len(seq)):
+            seq.sort(reverse=True, key=itemgetter(1))
+            i = 0
             j = i + 1
-            while counter < seq[i] and j < len(seq):
-                if seq[j] > 0:
-                    adj_list[i].append(j)
-                    adj_list[j].append(i)
-                    seq[j] -= 1
-                    counter += 1
+            while seq[i][1] > 0 and j < len(seq):
+                adj_list[seq[i][0]].append(seq[j][0])
+                adj_list[seq[j][0]].append(seq[i][0])
+                seq[i][1] -= 1
+                seq[j][1] -= 1
                 j += 1
 
         return cls(representation.adjacency_list(adj_list))
