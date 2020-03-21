@@ -30,7 +30,7 @@ class adjacency_list:
         return self.to_incidence_matrix().nodes()
 
     def to_adjacency_list(self):
-        return self.vertices
+        return self
 
     def to_adjacency_matrix(self):
         matrix = [self.vertices_num * [0] for _ in range(self.vertices_num)]
