@@ -34,7 +34,7 @@ class graph:
         self.graph_representation.print()
 
     def exchange_edges(self, edges):
-        self.graph_representation.exchange_edges(edges)
+        self.graph_representation.to_adjacency_list().exchange_edges(edges)
 
     def plot(self, name="graph.png"):
         plotter.plot(self, name)
