@@ -13,16 +13,18 @@ class graph:
 
     @classmethod
     def from_degree_seq(cls, sequence):
-        adj_list = [[] for _ in range(len(sequence))]
-        sequence.sort(reverse=True)
-        for i in range(len(sequence)):
+        seq = sequence.copy()
+
+        adj_list = [[] for _ in range(len(seq))]
+        seq.sort(reverse=True)
+        for i in range(len(seq)):
             counter = 0
             j = i + 1
-            while counter < sequence[i] and j < len(sequence):
-                if sequence[j] > 0:
+            while counter < seq[i] and j < len(seq):
+                if seq[j] > 0:
                     adj_list[i].append(j)
                     adj_list[j].append(i)
-                    sequence[j] -= 1
+                    seq[j] -= 1
                     counter += 1
                 j += 1
 

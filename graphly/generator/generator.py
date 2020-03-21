@@ -142,3 +142,4 @@ def generate_eulerian(vertices_num=random.randint(4, 50)):
 
     if algorithm.is_degree_seq(seq):
         g = graph.from_degree_seq(seq)
+        return g
