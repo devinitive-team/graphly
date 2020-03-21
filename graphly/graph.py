@@ -18,7 +18,7 @@ class graph:
         for i in range(len(sequence)):
             counter = 0
             j = i + 1
-            while counter < sequence[i]:
+            while counter < sequence[i] and j < len(sequence):
                 if sequence[j] > 0:
                     adj_list[i].append(j)
                     adj_list[j].append(i)

@@ -6,3 +6,5 @@ from graphly.graph import graph
 
 g = generator.generate("eulerian", 8)
 # print(algorithm.is_eulerian(g))
+for i in range(10000):
+    g = generator.generate_eulerian()
