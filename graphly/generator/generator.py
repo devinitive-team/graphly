@@ -117,12 +117,15 @@ def generate_eulerian(vertices_num=random.randint(4, 50)):
     """
     max_degree = vertices_num - 2 if vertices_num % 2 == 0 else vertices_num - 1
 
-    seq = []
-    for vertex in range(vertices_num):
-        seq.append(random.randrange(2, max_degree + 1, 2))  # all vertices of even degree
+    seq = None
+    is_degree_seq = False
+    while not is_degree_seq:
+        seq = []
+        for vertex in range(vertices_num):
+            seq.append(random.randrange(2, max_degree + 1, 2))  # all vertices of even degree
 
-    print(seq)
+        is_degree_seq = algorithm.is_degree_seq(seq)
 
-    if algorithm.is_degree_seq(seq):
-        g = graph.from_degree_seq(seq)
-        return g
+    g = graph.from_degree_seq(seq)
+
+    return g
