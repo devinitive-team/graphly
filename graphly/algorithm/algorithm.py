@@ -135,4 +135,22 @@ def is_eulerian(graph):
     is_every_degree_even = all(degree % 2 == 0 for degree in vertices_degree)
     return is_connected(graph) and is_every_degree_even
 
-# def find_eulerian_circut(graph):
+
+def is_edge_bridge(graph, edge):
+    """
+    :param graph
+    :param edge
+    :return: bool
+    """
+    if not is_connected(graph):
+        raise Exception
+
+    graph_copy = graph.copy(graph)
+    graph_copy.remove_edge(edge)
+    return not is_connected(graph_copy)
+
+
+def find_eulerian_circut(graph):
+    # graph.set_representation("incidence_matrix")
+    graph.remove_edge(2)
+    print(is_edge_bridge(graph, 4))

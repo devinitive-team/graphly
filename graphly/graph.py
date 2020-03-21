@@ -30,6 +30,11 @@ class graph:
 
         return cls(representation.adjacency_list(adj_list))
 
+    @classmethod
+    def copy(cls, graph):
+        copied_vertices = graph.graph_representation.copy()
+        return cls(representation.incidence_matrix(copied_vertices))
+
     def print(self):
         self.graph_representation.print()
 

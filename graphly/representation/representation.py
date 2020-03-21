@@ -7,6 +7,9 @@ class adjacency_list:
         for i in range(len(self.vertices)):
             print(f"{i}: {self.vertices[i]}")
 
+    def copy(self):
+        return self.vertices.copy()
+
     def edges(self):
         return self.to_incidence_matrix().edges()
 
@@ -68,6 +71,9 @@ class adjacency_matrix:
         for i in range(len(self.vertices)):
             print(f"{i}: {self.vertices[i]}")
 
+    def copy(self):
+        return self.vertices.copy()
+
     def edges(self):
         return self.to_incidence_matrix().edges()
 
@@ -112,6 +118,9 @@ class incidence_matrix:
         for i in range(len(self.vertices)):
             print(f"{i}: {self.vertices[i]}")
 
+    def copy(self):
+        return self.vertices.copy()
+
     def edges(self):
         edges_list = []
         for j in range(self.edges_num):
@@ -128,10 +137,7 @@ class incidence_matrix:
             raise Exception('Edge not exists')
 
         for i in range(self.vertices_num):
-            self.vertices[i].pop(edge)
-
-        self.edges_num = len(self.vertices[0])
-        self.vertices_num = len(self.vertices)
+            self.vertices[i][edge] = 0
 
     def exchange_edges(self, edges):
         print(self.vertices)
