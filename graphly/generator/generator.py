@@ -1,36 +1,19 @@
 import scipy.special
 import random
 from itertools import combinations
-from multipledispatch import dispatch
 
 from graphly.graph import graph
 from graphly.representation.representation import adjacency_list
 from graphly.algorithm import algorithm
 
 
-# function overloading doesn't work well in python...
-# I had to do it for api consistency
-@dispatch(str)
-def generate(generation_type):
-    return {
-        "eulerian": generate_eulerian
-    }[generation_type]()
-
-
-@dispatch(str, int)
-def generate(generation_type, x):
-    return {
-        "eulerian": generate_eulerian
-    }[generation_type](x)
-
-
-@dispatch(str, float, float)
-def generate(generation_type, x, y):
+def generate(generation_type, *args):
     return {
         "normal": generate_regular,
         "probability": generate_probability,
-        "k-regular": generate_k_regular
-    }[generation_type](x, y)
+        "k-regular": generate_k_regular,
+        "eulerian": generate_eulerian
+    }[generation_type](*args)
 
 
 def generate_regular(vertices_num, edges_num):
