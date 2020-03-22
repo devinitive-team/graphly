@@ -154,34 +154,37 @@ def is_edge_bridge(graph, edge):
 def find_eulerian_circuit(graph):
     """
     :param graph
-    :return: eulerian circut as an array of integers
+    :return: eulerian circuit as an array of integers
     """
     if not is_eulerian(graph):
         raise Exception
 
-    graph.set_representation("incidence_matrix")
+    graph.set_representation("adjacency_list")
 
-    eulerian_circut = []
+    edge_count = dict()
+
+    for i in range(len(graph.vertices())):
+        edge_count[i] = len(graph.vertices()[i])
+
+    eulerian_circuit = []
+    current_path = []
     current_vertex = 0
-    current_edge = None
+    current_path.append(current_vertex)
 
-    while any(graph.edges()):
-        print(current_vertex)
-        print(graph.vertices())
-        print(graph.edges())
-        eulerian_circut.append(current_vertex)
-        current_edge = graph.vertices()[current_vertex].index(1)
-        vertex_degree = graph.vertices()[current_vertex].count(1)
-        if not is_edge_bridge(graph, current_edge) or vertex_degree == 1:
-            vertex_1, vertex_2 = graph.edges()[current_edge]
-            current_vertex = vertex_1 if vertex_1 != current_vertex else vertex_2
-            graph.remove_edge(current_edge)
+    while len(current_path):
+        if edge_count[current_vertex]:
+            next_vertex = graph.vertices()[current_vertex][-1]
+
+            edge_count[current_vertex] -= 1
+            graph.vertices()[current_vertex].pop()
+
+            current_vertex = next_vertex
+
+            current_path.append(current_vertex)
         else:
-            print("other way")
-            break
+            eulerian_circuit.append(current_vertex)
+            current_vertex = current_path[-1]
+            current_path.pop()
 
-    print(current_vertex)
-    print(graph.vertices())
-    print(graph.edges())
-
-    return eulerian_circut
+    eulerian_circuit.reverse()
+    return eulerian_circuit
