@@ -2,6 +2,9 @@ import random
 import itertools
 import copy
 
+from graphly.graph import graph
+from graphly.representation.representation import adjacency_list
+
 
 def is_degree_seq(sequence):
     """
@@ -188,3 +191,25 @@ def find_eulerian_circuit(graph):
 
     eulerian_circuit.reverse()
     return eulerian_circuit
+
+
+def prim_algorithm(g):
+    print("prim algorithm...")
+    n_in_graph = g.get_nodes()
+    n_in_tree = []
+    e = g.get_edges()
+    T = [[] for _ in range(len(n_in_graph))]
+    n_in_tree.append(n_in_graph[0])
+    while len(n_in_tree) != len(n_in_graph):
+        current_edges = list(filter(lambda x: x.edge_tuple[0] in n_in_tree and x.edge_tuple[1] not in n_in_tree, e)) + list(filter(lambda x: x.edge_tuple[0] not in n_in_tree and x.edge_tuple[1] in n_in_tree, e))
+        current_edges.sort(key=lambda x: x.weight, reverse=False)
+        n_in_tree.append(current_edges[0].edge_tuple[1] if current_edges[0].edge_tuple[0] in n_in_tree else current_edges[0].edge_tuple[0] )
+        T[current_edges[0].edge_tuple[0]].append(current_edges[0].edge_tuple[1])
+        T[current_edges[0].edge_tuple[1]].append(current_edges[0].edge_tuple[0])
+    result = graph(adjacency_list(T))
+    result_e = result.get_edges()
+    for res_e in result_e:
+        for src_e in e:
+            if res_e.edge_tuple[0] == src_e.edge_tuple[0] and res_e.edge_tuple[1] == src_e.edge_tuple[1]:
+                res_e.set_weight(src_e.get_weight())
+    return result
