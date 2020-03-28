@@ -2,14 +2,18 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 
-def plot(graph):
+def plot(graph, name="graph.png"):
     g = nx.Graph()
-
-    for edge in graph.edges():
-        g.add_edge(edge[0], edge[1])
 
     for node in graph.nodes():
         g.add_node(node)
 
+    temp = graph.edges()
+    temp.sort()
+    for edge in temp:
+        g.add_edge(edge[0], edge[1])
+
     nx.draw_circular(g, with_labels=True)
-    plt.savefig("graph.png")
+
+    plt.savefig(name, format='png')
+    plt.clf()
