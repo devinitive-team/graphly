@@ -8,6 +8,8 @@ from graphly.representation import representation
 class graph:
     def __init__(self, graph_representation):
         self.graph_representation = graph_representation
+        self.edges = graph_representation.regenerate_edges()
+        self.nodes = graph_representation.regenerate_nodes()
 
     @classmethod
     def from_file(cls, filepath):
@@ -39,6 +41,7 @@ class graph:
 
     def exchange_edges(self, edges):
         self.graph_representation.to_adjacency_list().exchange_edges(edges)
+        self.edges = self.graph_representation.regenerate_edges()
 
     def plot(self, name="graph.png"):
         plotter.plot(self, name)
@@ -46,20 +49,21 @@ class graph:
     def plot_weighted(self, name="graph.png"):
         plotter.plot_weighted(self, name)
 
+    def get_vertices(self):
+        return self.graph_representation.vertices
+
+    def get_nodes(self):
+        return self.nodes
+
     def get_edges(self):
-        return self.graph_representation.get_edges()
+        return self.edges
 
     def remove_edge(self, e):
-        return self.graph_representation.remove_edge(e)
+        self.graph_representation.remove_edge(e)
+        self.edges = self.graph_representation.regenerate_edges()
 
     def edge_exists(self, first_node, second_node):
         return self.graph_representation.edge_exists(first_node, second_node)
-
-    def get_nodes(self):
-        return self.graph_representation.get_nodes()
-
-    def get_vertices(self):
-        return self.graph_representation.get_vertices()
 
     def get_adjacency_list(self):
         return self.graph_representation.to_adjacency_list()

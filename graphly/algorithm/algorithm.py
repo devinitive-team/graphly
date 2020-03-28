@@ -130,7 +130,7 @@ def is_eulerian(graph):
     """
     graph.set_representation("adjacency_list")
     vertices_degree = []
-    for vertex in graph.vertices():
+    for vertex in graph.get_vertices():
         vertices_degree.append(len(vertex))
 
     is_every_degree_even = all(degree % 2 == 0 for degree in vertices_degree)
@@ -163,8 +163,8 @@ def find_eulerian_circuit(graph):
 
     edge_count = dict()
 
-    for i in range(len(graph.vertices())):
-        edge_count[i] = len(graph.vertices()[i])
+    for i in range(len(graph.get_vertices())):
+        edge_count[i] = len(graph.get_vertices()[i])
 
     eulerian_circuit = []
     current_path = []
@@ -173,10 +173,10 @@ def find_eulerian_circuit(graph):
 
     while len(current_path):
         if edge_count[current_vertex]:
-            next_vertex = graph.vertices()[current_vertex][-1]
+            next_vertex = graph.get_vertices()[current_vertex][-1]
 
             edge_count[current_vertex] -= 1
-            graph.vertices()[current_vertex].pop()
+            graph.get_vertices()[current_vertex].pop()
 
             current_vertex = next_vertex
 

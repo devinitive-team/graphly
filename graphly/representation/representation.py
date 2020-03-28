@@ -11,11 +11,11 @@ class adjacency_list:
         for i in range(len(self.vertices)):
             print(f"{i}: {self.vertices[i]}")
 
-    def get_nodes(self):
-        return self.to_incidence_matrix().get_nodes()
+    def regenerate_nodes(self):
+        return self.to_incidence_matrix().regenerate_nodes()
 
-    def get_edges(self):
-        return self.edges
+    def regenerate_edges(self):
+        return self.to_incidence_matrix().regenerate_edges()
 
     def remove_edge(self, e):
         return self.to_incidence_matrix().remove_edge(e)
@@ -73,11 +73,11 @@ class adjacency_matrix:
         for i in range(len(self.vertices)):
             print(f"{i}: {self.vertices[i]}")
 
-    def get_nodes(self):
-        return self.to_incidence_matrix().get_nodes()
+    def regenerate_nodes(self):
+        return self.to_incidence_matrix().regenerate_nodes()
 
-    def get_edges(self):
-        return self.edges
+    def regenerate_edges(self):
+        return self.to_incidence_matrix().regenerate_edges()
 
     def remove_edge(self, e):
         return self.to_incidence_matrix().remove_edge(e)
@@ -112,17 +112,13 @@ class incidence_matrix:
         self.vertices = vertices
         self.edges_num = len(self.vertices[0])
         self.vertices_num = len(self.vertices)
-        self.edges = self.regenerate_edges()
 
     def print(self):
         for i in range(len(self.vertices)):
             print(f"{i}: {self.vertices[i]}")
 
-    def get_nodes(self):
+    def regenerate_nodes(self):
         return [i for i in range(self.vertices_num)]
-
-    def get_edges(self):
-        return self.edges
 
     def regenerate_edges(self):
         edges_list = []
