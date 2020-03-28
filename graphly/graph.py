@@ -43,27 +43,24 @@ class graph:
     def plot(self, name="graph.png"):
         plotter.plot(self, name)
 
-    def edges(self):
-        return self.graph_representation.edges()
+    def plot_weighted(self, name="graph.png"):
+        plotter.plot_weighted(self, name)
 
-    def remove_edge(self, edge):
-        return self.graph_representation.remove_edge(edge)
+
+    def get_edges(self):
+        return self.graph_representation.get_edges()
+
+    def remove_edge(self, e):
+        return self.graph_representation.remove_edge(e)
 
     def edge_exists(self, first_node, second_node):
         return self.graph_representation.edge_exists(first_node, second_node)
 
-    def nodes(self):
-        return self.graph_representation.nodes()
+    def get_nodes(self):
+        return self.graph_representation.get_nodes()
 
-    def vertices(self):
-        return self.graph_representation.vertices
-
-    def set_representation(self, representation_string):
-        self.graph_representation = {
-            "adjacency_list": self.get_adjacency_list,
-            "adjacency_matrix": self.get_adjacency_matrix,
-            "incidence_matrix": self.get_incidence_matrix
-        }[representation_string]()
+    def get_vertices(self):
+        return self.graph_representation.get_vertices()
 
     def get_adjacency_list(self):
         return self.graph_representation.to_adjacency_list()
@@ -73,3 +70,10 @@ class graph:
 
     def get_incidence_matrix(self):
         return self.graph_representation.to_incidence_matrix()
+
+    def set_representation(self, representation_string):
+        self.graph_representation = {
+            "adjacency_list": self.get_adjacency_list,
+            "adjacency_matrix": self.get_adjacency_matrix,
+            "incidence_matrix": self.get_incidence_matrix
+        }[representation_string]()

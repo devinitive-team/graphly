@@ -28,7 +28,7 @@ def is_degree_seq(sequence):
 
 
 def components_helper(nr, v, graph, comp):
-    vert = graph.nodes()
+    vert = graph.get_nodes()
     for u in vert:
         if graph.edge_exists(u, v):
             if comp[u] == -1:
@@ -42,7 +42,7 @@ def components(graph):
     :return: array of integers ordered that every vertex belongs to a component
     """
     nr = 0  # which connected component
-    vert = graph.nodes()
+    vert = graph.get_nodes()
     comp = [-1 for _ in vert]  # no vertices were visited
     for v in vert:
         if comp[v] == -1:
@@ -79,7 +79,7 @@ def randomize_graph(graph, num):
     :param num: number of randomizations
     """
     for _ in range(num):
-        edges = graph.edges()
+        edges = graph.get_edges()
         random_edges = random.choices(edges, k=2)
         ready = False
         while not ready:
@@ -95,7 +95,7 @@ def randomize_graph(graph, num):
 
 
 def is_hamiltonian(graph):
-    nodes = graph.nodes()
+    nodes = graph.get_nodes()
     permutations = list(itertools.permutations(nodes))
 
     graph.set_representation("adjacency_matrix")
