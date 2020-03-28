@@ -1,4 +1,5 @@
 from operator import itemgetter
+from graphly.algorithm import algorithm
 from graphly.reader import reader
 from graphly.plotter import plotter
 from graphly.representation import representation
@@ -14,6 +15,9 @@ class graph:
 
     @classmethod
     def from_degree_seq(cls, sequence):
+        if not algorithm.is_degree_seq(sequence):
+            raise Exception("Provide a sequence that is a degree sequence.")
+
         seq = [[index, value] for index, value in enumerate(sequence)]
 
         adj_list = [[] for _ in range(len(seq))]
