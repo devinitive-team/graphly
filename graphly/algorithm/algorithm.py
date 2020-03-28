@@ -83,15 +83,15 @@ def randomize_graph(graph, num):
         random_edges = random.choices(edges, k=2)
         ready = False
         while not ready:
-            for node in random_edges[0]:
-                if node in random_edges[1]:
+            for node in random_edges[0].get_tuple():
+                if node in random_edges[1].get_tuple():
                     random_edges = random.choices(edges, k=2)
                     ready = False
                     break
                 else:
                     ready = True
 
-        graph.exchange_edges(random_edges)
+        graph.exchange_edges([e.get_tuple() for e in random_edges])
 
 
 def is_hamiltonian(graph):

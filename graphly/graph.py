@@ -46,7 +46,6 @@ class graph:
     def plot_weighted(self, name="graph.png"):
         plotter.plot_weighted(self, name)
 
-
     def get_edges(self):
         return self.graph_representation.get_edges()
 
