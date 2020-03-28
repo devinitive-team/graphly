@@ -1,6 +1,7 @@
 import random
 import itertools
 import copy
+import math
 
 from graphly.graph import graph
 from graphly.representation.representation import adjacency_list
@@ -193,8 +194,48 @@ def find_eulerian_circuit(graph):
     return eulerian_circuit
 
 
+def minimum_distance(g, d_s, S):
+    """ Dijkstra algorithm helper function """
+    vertex_count = len(g.get_vertices())
+
+    minimum = math.inf
+    minimum_index = None
+
+    for v in range(vertex_count):
+        if d_s[v] < minimum and v not in S:
+            minimum = d_s[v]
+            minimum_index = v
+
+    return minimum_index
+
+
+def dijkstra_algorithm(g, source=0):
+    """
+    :param g: weighted graph
+    :param source: a vertex which execution of algorithm is started, defaulted to 0
+    :return array of shortest paths from  given vertex
+    """
+    vertex_count = len(g.get_vertices())
+    d_s = [math.inf for _ in range(vertex_count)]
+    d_s[source] = 0
+    p_s = [None for _ in range(vertex_count)]
+
+    S = []
+    while sorted(S) != list(range(vertex_count)):
+        u = minimum_distance(g, d_s, S)
+        S.append(u)
+
+        for v in g.get_vertices()[u]:
+            if v not in S:
+                weight = g.get_edge(u, v).get_weight()
+                if d_s[v] > d_s[u] + weight:
+                    d_s[v] = d_s[u] + weight
+                    p_s[v] = u
+
+    return d_s
+
+
 def prim_algorithm(g):
-    print("prim algorithm...")
     n_in_graph = g.get_nodes()
     n_in_tree = []
     e = g.get_edges()
