@@ -58,6 +58,14 @@ class graph:
     def get_edges(self):
         return self.edges
 
+    def get_edge(self, first_vertex, second_vertex):
+        smaller, bigger = sorted([first_vertex, second_vertex])
+        for e in self.edges:
+            if e.edge_tuple[0] == smaller and e.edge_tuple[1] == bigger:
+                return e
+
+        raise Exception("Edge not found")
+
     def remove_edge(self, e):
         self.graph_representation.remove_edge(e)
         self.edges = self.graph_representation.regenerate_edges()
