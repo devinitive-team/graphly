@@ -12,7 +12,8 @@ def generate(generation_type, *args):
         "normal": generate_regular,
         "probability": generate_probability,
         "k-regular": generate_k_regular,
-        "eulerian": generate_eulerian
+        "eulerian": generate_eulerian,
+        "random-connected": generate_random_connected
     }[generation_type](*args)
 
 
@@ -129,3 +130,10 @@ def generate_eulerian(vertices_num=random.randint(4, 50)):
     g = graph.from_degree_seq(seq)
 
     return g
+
+
+def generate_random_connected(vertices_num):
+    while True:
+        g = generate_probability(vertices_num, 0.3)
+        if algorithm.is_connected(g):
+            return g

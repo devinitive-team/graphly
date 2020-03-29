@@ -1,17 +1,24 @@
+from graphly.edge import edge
+
+
 class adjacency_list:
     def __init__(self, vertices):
         self.vertices = vertices
         self.vertices_num = len(vertices)
+        self.edges = self.to_incidence_matrix().regenerate_edges()
 
     def print(self):
         for i in range(len(self.vertices)):
             print(f"{i}: {self.vertices[i]}")
 
-    def edges(self):
-        return self.to_incidence_matrix().edges()
+    def regenerate_nodes(self):
+        return self.to_incidence_matrix().regenerate_nodes()
 
-    def remove_edge(self, edge):
-        return self.to_incidence_matrix().remove_edge(edge)
+    def regenerate_edges(self):
+        return self.to_incidence_matrix().regenerate_edges()
+
+    def remove_edge(self, e):
+        return self.to_incidence_matrix().remove_edge(e)
 
     def exchange_edges(self, edges):
         if edges[1][1] not in self.vertices[edges[0][0]] and edges[1][0] not in self.vertices[edges[0][1]]:
@@ -28,9 +35,6 @@ class adjacency_list:
 
     def edge_exists(self, first_node, second_node):
         return self.to_adjacency_matrix().edge_exists(first_node, second_node)
-
-    def nodes(self):
-        return self.to_incidence_matrix().nodes()
 
     def to_adjacency_list(self):
         return self
@@ -51,10 +55,10 @@ class adjacency_list:
         edge_index_map = {}
         for i in range(self.vertices_num):
             for j in self.vertices[i]:
-                edge = tuple(sorted([i, j]))
-                if edge not in edge_index_map:
-                    edge_index_map[edge] = len(edge_index_map)
-                edge_index = edge_index_map[edge]
+                e = tuple(sorted([i, j]))
+                if e not in edge_index_map:
+                    edge_index_map[e] = len(edge_index_map)
+                edge_index = edge_index_map[e]
                 matrix[i][edge_index] = 1
 
         return incidence_matrix(matrix)
@@ -63,16 +67,20 @@ class adjacency_list:
 class adjacency_matrix:
     def __init__(self, vertices):
         self.vertices = vertices
+        self.edges = self.to_incidence_matrix().regenerate_edges()
 
     def print(self):
         for i in range(len(self.vertices)):
             print(f"{i}: {self.vertices[i]}")
 
-    def edges(self):
-        return self.to_incidence_matrix().edges()
+    def regenerate_nodes(self):
+        return self.to_incidence_matrix().regenerate_nodes()
 
-    def remove_edge(self, edge):
-        return self.to_incidence_matrix().remove_edge(edge)
+    def regenerate_edges(self):
+        return self.to_incidence_matrix().regenerate_edges()
+
+    def remove_edge(self, e):
+        return self.to_incidence_matrix().remove_edge(e)
 
     def exchange_edges(self, edges):
         print(self.vertices)
@@ -81,9 +89,6 @@ class adjacency_matrix:
 
     def edge_exists(self, first_node, second_node):
         return True if self.vertices[first_node][second_node] != 0 else False
-
-    def nodes(self):
-        return self.to_incidence_matrix().nodes()
 
     def to_adjacency_matrix(self):
         return self.vertices
@@ -112,23 +117,28 @@ class incidence_matrix:
         for i in range(len(self.vertices)):
             print(f"{i}: {self.vertices[i]}")
 
-    def edges(self):
+    def regenerate_nodes(self):
+        return [i for i in range(self.vertices_num)]
+
+    def regenerate_edges(self):
         edges_list = []
         for j in range(self.edges_num):
             current_edge = []
+            weight = 1
             for i in range(self.vertices_num):
-                if self.vertices[i][j] == 1:
+                if self.vertices[i][j] != 0:
                     current_edge.append(i)
-            edges_list.append(current_edge)
+                    weight = self.vertices[i][j]
+            edges_list.append(edge(current_edge, weight))
 
         return edges_list
 
-    def remove_edge(self, edge):
-        if edge >= self.edges_num:
-            raise Exception('Edge not exists')
+    def remove_edge(self, e):
+        if e >= self.edges_num:
+            raise Exception("Edge does not exist")
 
         for i in range(self.vertices_num):
-            self.vertices[i][edge] = 0
+            self.vertices[i][e] = 0
 
     def exchange_edges(self, edges):
         print(self.vertices)
@@ -137,9 +147,6 @@ class incidence_matrix:
 
     def edge_exists(self, first_node, second_node):
         return self.to_adjacency_matrix().edge_exists(first_node, second_node)
-
-    def nodes(self):
-        return [i for i in range(self.vertices_num)]
 
     def to_incidence_matrix(self):
         return self.vertices
