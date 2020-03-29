@@ -1,9 +1,10 @@
 import scipy.special
 import random
 from itertools import combinations
+from operator import itemgetter
 
 from graphly.graph import graph
-from graphly.representation.representation import adjacency_list
+from graphly.representation import representation
 from graphly.algorithm import algorithm
 
 
@@ -13,7 +14,8 @@ def generate(generation_type, *args):
         "probability": generate_probability,
         "k-regular": generate_k_regular,
         "eulerian": generate_eulerian,
-        "random-connected": generate_random_connected
+        "random-connected": generate_random_connected,
+        "degree-seq": generate_from_degree_seq
     }[generation_type](*args)
 
 
@@ -33,7 +35,7 @@ def generate_regular(vertices_num, edges_num):
 
         i += 1
 
-    return graph(adjacency_list(adj_list))
+    return graph(representation.adjacency_list(adj_list))
 
 
 def generate_probability(vertices_num, probability):
@@ -48,7 +50,7 @@ def generate_probability(vertices_num, probability):
             adj_list[edge_list[i][0]].append(edge_list[i][1])
             adj_list[edge_list[i][1]].append(edge_list[i][0])
 
-    return graph(adjacency_list(adj_list))
+    return graph(representation.adjacency_list(adj_list))
 
 
 def generate_k_regular(n, k):  # n - number of vertices, k - regularity
@@ -81,7 +83,7 @@ def generate_k_regular(n, k):  # n - number of vertices, k - regularity
         adj_list[edge_list[i][0]].append(edge_list[i][1])
         adj_list[edge_list[i][1]].append(edge_list[i][0])
 
-    return graph(adjacency_list(adj_list))
+    return graph(representation.adjacency_list(adj_list))
 
 
 def generate_random_pair(edge_list, points):
@@ -127,7 +129,7 @@ def generate_eulerian(vertices_num=random.randint(4, 50)):
 
         is_degree_seq = algorithm.is_degree_seq(seq)
 
-    g = graph.from_degree_seq(seq)
+    g = generate("degree-seq", seq)
 
     return g
 
@@ -137,3 +139,24 @@ def generate_random_connected(vertices_num):
         g = generate_probability(vertices_num, 0.3)
         if algorithm.is_connected(g):
             return g
+
+
+def generate_from_degree_seq(sequence):
+    if not algorithm.is_degree_seq(sequence):
+        raise Exception("Provide a sequence that is a degree sequence.")
+
+    seq = [[index, value] for index, value in enumerate(sequence)]
+
+    adj_list = [[] for _ in range(len(seq))]
+    for _ in range(len(seq)):
+        seq.sort(reverse=True, key=itemgetter(1))
+        i = 0
+        j = i + 1
+        while seq[i][1] > 0 and j < len(seq):
+            adj_list[seq[i][0]].append(seq[j][0])
+            adj_list[seq[j][0]].append(seq[i][0])
+            seq[i][1] -= 1
+            seq[j][1] -= 1
+            j += 1
+
+    return graph(representation.adjacency_list(adj_list))

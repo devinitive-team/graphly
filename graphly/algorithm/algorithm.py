@@ -4,7 +4,7 @@ import copy
 import math
 
 from graphly.graph import graph
-from graphly.representation.representation import adjacency_list
+from graphly.representation import representation
 
 
 def is_degree_seq(sequence):
@@ -247,7 +247,7 @@ def prim_algorithm(g):
         n_in_tree.append(current_edges[0].edge_tuple[1] if current_edges[0].edge_tuple[0] in n_in_tree else current_edges[0].edge_tuple[0] )
         T[current_edges[0].edge_tuple[0]].append(current_edges[0].edge_tuple[1])
         T[current_edges[0].edge_tuple[1]].append(current_edges[0].edge_tuple[0])
-    result = graph(adjacency_list(T))
+    result = graph(representation.adjacency_list(T))
     result_e = result.get_edges()
     for res_e in result_e:
         for src_e in e:
