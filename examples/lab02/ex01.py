@@ -1,8 +1,7 @@
-from graphly.algorithm import algorithm
-from graphly.graph import graph
+from graphly.generator import generator
 
 seq = [4, 2, 2, 3, 2, 1, 4, 2, 2, 2, 2]
 
-g = graph.from_degree_seq(seq)
+g = generator.generate("degree-seq", seq)
 g.print()
 g.plot()
