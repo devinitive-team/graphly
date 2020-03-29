@@ -254,3 +254,32 @@ def prim_algorithm(g):
             if res_e.edge_tuple[0] == src_e.edge_tuple[0] and res_e.edge_tuple[1] == src_e.edge_tuple[1]:
                 res_e.set_weight(src_e.get_weight())
     return result
+
+
+def calculate_distance_matrix(g):
+    matrix = []
+
+    for v in range(len(g.get_vertices())):
+        matrix.append(dijkstra_algorithm(g, v))
+
+    return matrix
+
+
+def calculate_center(g):
+    """
+    :param g: graph
+    :return: index of center vertex in given graph
+    """
+    distance_matrix = calculate_distance_matrix(g)
+    distances = list(map(sum, zip(*distance_matrix)))  # sum of columns
+    return distances.index(max(distances))  # index of max value in list
+
+
+def calculate_minmax_center(g):
+    """
+    :param g: graph
+    :return: index of minmax center vertex in given graph
+    """
+    distance_matrix = calculate_distance_matrix(g)
+    max_distances = list(map(max, zip(*distance_matrix)))  # max value in each column
+    return max_distances.index(min(max_distances))  # index of min value in list
