@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="graphly",
-    version="1.0.7",
+    version="1.0.8",
     author="devinitive",
     author_email="devinitive@placeholder.com",
     description="A small library for studying graphs",
