@@ -243,9 +243,12 @@ def prim_algorithm(g):
     T = [[] for _ in range(len(n_in_graph))]
     n_in_tree.append(n_in_graph[0])
     while len(n_in_tree) != len(n_in_graph):
-        current_edges = list(filter(lambda x: x.edge_tuple[0] in n_in_tree and x.edge_tuple[1] not in n_in_tree, e)) + list(filter(lambda x: x.edge_tuple[0] not in n_in_tree and x.edge_tuple[1] in n_in_tree, e))
+        current_edges = list(
+            filter(lambda x: x.edge_tuple[0] in n_in_tree and x.edge_tuple[1] not in n_in_tree, e)) + list(
+            filter(lambda x: x.edge_tuple[0] not in n_in_tree and x.edge_tuple[1] in n_in_tree, e))
         current_edges.sort(key=lambda x: x.weight, reverse=False)
-        n_in_tree.append(current_edges[0].edge_tuple[1] if current_edges[0].edge_tuple[0] in n_in_tree else current_edges[0].edge_tuple[0] )
+        n_in_tree.append(current_edges[0].edge_tuple[1] if current_edges[0].edge_tuple[0] in n_in_tree else
+                         current_edges[0].edge_tuple[0])
         T[current_edges[0].edge_tuple[0]].append(current_edges[0].edge_tuple[1])
         T[current_edges[0].edge_tuple[1]].append(current_edges[0].edge_tuple[0])
     result = graph(representation.adjacency_list(T))
@@ -285,6 +288,7 @@ def calculate_minmax_center(g):
     max_distances = list(map(max, zip(*distance_matrix)))  # max value in each column
     return max_distances.index(min(max_distances))  # index of min value in list
 
+
 def DFS_visit(v, g, d, f, t):
     t = t + 1
     d[v] = t
@@ -298,12 +302,14 @@ def DFS_visit(v, g, d, f, t):
     f[v] = t
     return t
 
+
 def components_r(nr, v, gT, comp):
     neighbours = [n[1] for n in list(filter(lambda x: x[0] == v, gT))]
     for n in neighbours:
         if comp[n] == -1:
             comp[n] = nr
             components_r(nr, v, gT, comp)
+
 
 def kosaraju_algorithm(g):
     vert = g.get_nodes()
@@ -326,3 +332,31 @@ def kosaraju_algorithm(g):
             comp[v] = nr
             components_r(nr, v, gT, comp)
     return comp
+
+
+def bellman_ford_algorithm(g, source=0):
+    """
+    :param g: weighted digraph
+    :param source: a vertex which execution of algorithm is started, defaulted to 0
+    :return: bool
+    """
+    vertex_count = len(g.get_vertices())
+    d_s = [math.inf for _ in range(vertex_count)]
+    d_s[source] = 0
+    p_s = [None for _ in range(vertex_count)]
+
+    for _ in range(vertex_count - 1):
+        for e in g.get_edges():
+            u, v = e.get_tuple()
+            weight = g.get_edge(u, v).get_weight()
+            if d_s[v] > d_s[u] + weight:
+                d_s[v] = d_s[u] + weight
+                p_s[v] = u
+
+    for e in g.get_edges():
+        u, v = e.get_tuple()
+        weight = g.get_edge(u, v).get_weight()
+        if d_s[v] > d_s[u] + weight:
+            return False
+
+    return True

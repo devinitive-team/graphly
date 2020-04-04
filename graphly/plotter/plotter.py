@@ -2,6 +2,7 @@ from operator import attrgetter
 import networkx as nx
 import matplotlib.pyplot as plt
 
+
 def plot(graph, name="graph.png"):
     g = nx.Graph()
 
@@ -73,13 +74,14 @@ def plot_weighted_digraph(digraph, name="digraph.png"):
     plt.savefig(name, format="png")
     plt.clf()
 
+
 def plot_with_component(digraph, components, name="digraph.png"):
     plt.clf()
     g = nx.DiGraph()
     colors = []
     colors_map = ['red', 'orange', 'yellow', 'brown', 'green', 'blue', 'pink', 'purple']
     if max(components) > len(colors_map):
-       raise Exception("Not enough colors to draw graph")
+        raise Exception("Not enough colors to draw graph")
     for node in digraph.get_nodes():
         g.add_node(node)
         colors.append(colors_map[components[node]])
