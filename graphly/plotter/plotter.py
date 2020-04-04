@@ -2,7 +2,6 @@ from operator import attrgetter
 import networkx as nx
 import matplotlib.pyplot as plt
 
-
 def plot(graph, name="graph.png"):
     g = nx.Graph()
 
@@ -71,5 +70,24 @@ def plot_weighted_digraph(digraph, name="digraph.png"):
     labels = nx.get_edge_attributes(g, "weight")
     nx.draw_networkx_edge_labels(g, pos, edge_labels=labels)
 
+    plt.savefig(name, format="png")
+    plt.clf()
+
+def plot_with_component(digraph, components, name="digraph.png"):
+    plt.clf()
+    g = nx.DiGraph()
+    colors = []
+    colors_map = ['red', 'orange', 'yellow', 'brown', 'green', 'blue', 'pink', 'purple']
+    if max(components) > len(colors_map):
+       raise Exception("Not enough colors to draw graph")
+    for node in digraph.get_nodes():
+        g.add_node(node)
+        colors.append(colors_map[components[node]])
+
+    edges = digraph.get_edges()
+    for e in edges:
+        g.add_edge(e.get_tuple()[0], e.get_tuple()[1], weight=e.get_weight(), color='red')
+    pos = nx.circular_layout(g)
+    nx.draw_networkx(g, pos, node_color=colors)
     plt.savefig(name, format="png")
     plt.clf()

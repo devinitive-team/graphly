@@ -4,6 +4,7 @@ import copy
 import math
 
 from graphly.graph import graph
+from graphly.digraph import digraph
 from graphly.representation import representation
 
 
@@ -283,3 +284,45 @@ def calculate_minmax_center(g):
     distance_matrix = calculate_distance_matrix(g)
     max_distances = list(map(max, zip(*distance_matrix)))  # max value in each column
     return max_distances.index(min(max_distances))  # index of min value in list
+
+def DFS_visit(v, g, d, f, t):
+    t = t + 1
+    d[v] = t
+
+    neighbours = [n.edge_tuple[1] for n in list(filter(lambda x: x.edge_tuple[0] == v, g.get_edges()))]
+    for n in neighbours:
+        if d[n] == -1:
+            t = DFS_visit(n, g, d, f, t)
+
+    t = t + 1
+    f[v] = t
+    return t
+
+def components_r(nr, v, gT, comp):
+    neighbours = [n[1] for n in list(filter(lambda x: x[0] == v, gT))]
+    for n in neighbours:
+        if comp[n] == -1:
+            comp[n] = nr
+            components_r(nr, v, gT, comp)
+
+def kosaraju_algorithm(g):
+    vert = g.get_nodes()
+    d = [-1 for _ in range(len(vert))]
+    f = [-1 for _ in range(len(vert))]
+    t = 0
+    for v in vert:
+        if d[v] == -1:
+            t = DFS_visit(v, g, d, f, t)
+
+    gT = g.transpose_edges()
+    f = [(c, val) for c, val in enumerate(f, 0)]
+    f.sort(key=lambda x: x[1], reverse=True)
+    nr = 0
+    comp = [-1 for _ in range(len(vert))]
+    for elem in f:
+        v = elem[0]
+        if comp[v] == -1:
+            nr = nr + 1
+            comp[v] = nr
+            components_r(nr, v, gT, comp)
+    return comp

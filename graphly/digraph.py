@@ -1,12 +1,15 @@
 from graphly.reader import reader
 from graphly.plotter import plotter
-
+from graphly import edge
 
 class digraph:
     def __init__(self, graph_representation):
         self.graph_representation = graph_representation
         self.edges = graph_representation.regenerate_edges()
         self.nodes = graph_representation.regenerate_nodes()
+
+    def transpose_edges(self):
+        return [(e.edge_tuple[1], e.edge_tuple[0]) for e in self.edges]
 
     @classmethod
     def from_file(cls, filepath):
@@ -24,6 +27,9 @@ class digraph:
 
     def plot_weighted(self, name="digraph.png"):
         plotter.plot_weighted_digraph(self, name)
+
+    def plot_components(self, components, name="digraph.png"):
+        plotter.plot_with_component(self, components, name)
 
     def get_vertices(self):
         return self.graph_representation.vertices
