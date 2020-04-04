@@ -4,6 +4,7 @@ from itertools import combinations
 from operator import itemgetter
 
 from graphly.graph import graph
+from graphly.digraph import digraph
 from graphly.representation import representation
 from graphly.algorithm import algorithm
 
@@ -12,6 +13,7 @@ def generate(generation_type, *args):
     return {
         "normal": generate_regular,
         "probability": generate_probability,
+        "probability-digraph": generate_probability_digraph,
         "k-regular": generate_k_regular,
         "eulerian": generate_eulerian,
         "random-connected": generate_random_connected,
@@ -51,6 +53,22 @@ def generate_probability(vertices_num, probability):
             adj_list[edge_list[i][1]].append(edge_list[i][0])
 
     return graph(representation.adjacency_list(adj_list))
+
+
+def generate_probability_digraph(vertices_num, probability):
+    if 0.0 > probability > 1.0:
+        raise Exception("Probability domain [0, 1]")
+
+    edge_list = list(combinations([i for i in range(vertices_num)], 2))
+
+    adj_list = [[] for _ in range(vertices_num)]
+    for i in range(len(edge_list)):
+        if random.random() < probability:
+            adj_list[edge_list[i][0]].append(edge_list[i][1])
+        if random.random() < probability:
+            adj_list[edge_list[i][1]].append(edge_list[i][0])
+
+    return digraph(representation.adjacency_list(adj_list, is_directed=True))
 
 
 def generate_k_regular(n, k):  # n - number of vertices, k - regularity

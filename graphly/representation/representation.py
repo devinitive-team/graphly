@@ -2,9 +2,10 @@ from graphly.edge import edge
 
 
 class adjacency_list:
-    def __init__(self, vertices):
+    def __init__(self, vertices, is_directed=False):
         self.vertices = vertices
         self.vertices_num = len(vertices)
+        self.is_directed = is_directed
         self.edges = self.to_incidence_matrix().regenerate_edges()
 
     def print(self):
@@ -40,33 +41,50 @@ class adjacency_list:
         return self
 
     def to_adjacency_matrix(self):
-        matrix = [self.vertices_num * [0] for _ in range(self.vertices_num)]
+        if self.is_directed:
+            raise Exception("Not implemented for directed graphs.")
+        else:
+            matrix = [self.vertices_num * [0] for _ in range(self.vertices_num)]
 
-        for i in range(self.vertices_num):
-            for j in self.vertices[i]:
-                matrix[i][j] = 1
+            for i in range(self.vertices_num):
+                for j in self.vertices[i]:
+                    matrix[i][j] = 1
 
-        return adjacency_matrix(matrix)
+            return adjacency_matrix(matrix)
 
     def to_incidence_matrix(self):
-        num_edges = sum(len(vertex) for vertex in self.vertices) // 2
-        matrix = [num_edges * [0] for _ in range(self.vertices_num)]
+        if self.is_directed:
+            num_edges = sum(len(vertex) for vertex in self.vertices)
+            matrix = [num_edges * [0] for _ in range(self.vertices_num)]
 
-        edge_index_map = {}
-        for i in range(self.vertices_num):
-            for j in self.vertices[i]:
-                e = tuple(sorted([i, j]))
-                if e not in edge_index_map:
-                    edge_index_map[e] = len(edge_index_map)
-                edge_index = edge_index_map[e]
-                matrix[i][edge_index] = 1
+            edge_index = 0
+            for i in range(self.vertices_num):
+                for j in self.vertices[i]:
+                    matrix[i][edge_index] = -1
+                    matrix[j][edge_index] = 1
+                    edge_index += 1
 
-        return incidence_matrix(matrix)
+            return incidence_matrix(matrix, self.is_directed)
+        else:
+            num_edges = sum(len(vertex) for vertex in self.vertices) // 2
+            matrix = [num_edges * [0] for _ in range(self.vertices_num)]
+
+            edge_index_map = {}
+            for i in range(self.vertices_num):
+                for j in self.vertices[i]:
+                    e = tuple(sorted([i, j]))
+                    if e not in edge_index_map:
+                        edge_index_map[e] = len(edge_index_map)
+                    edge_index = edge_index_map[e]
+                    matrix[i][edge_index] = 1
+
+            return incidence_matrix(matrix, self.is_directed)
 
 
 class adjacency_matrix:
-    def __init__(self, vertices):
+    def __init__(self, vertices, is_directed=False):
         self.vertices = vertices
+        self.is_directed = is_directed
         self.edges = self.to_incidence_matrix().regenerate_edges()
 
     def print(self):
@@ -94,23 +112,27 @@ class adjacency_matrix:
         return self.vertices
 
     def to_adjacency_list(self):
-        adj_list = []
-        for i in range(len(self.vertices)):
-            adj_list.append([])
-            for j in range(len(self.vertices[i])):
-                if self.vertices[i][j] != 0:
-                    adj_list[i].append(j)
+        if self.is_directed:
+            raise Exception("Not implemented for directed graphs.")
+        else:
+            adj_list = []
+            for i in range(len(self.vertices)):
+                adj_list.append([])
+                for j in range(len(self.vertices[i])):
+                    if self.vertices[i][j] != 0:
+                        adj_list[i].append(j)
 
-        return adjacency_list(adj_list)
+            return adjacency_list(adj_list)
 
     def to_incidence_matrix(self):
         return self.to_adjacency_list().to_incidence_matrix()
 
 
 class incidence_matrix:
-    def __init__(self, vertices):
+    def __init__(self, vertices, is_directed=False):
         self.vertices = vertices
         self.edges_num = len(self.vertices[0])
+        self.is_directed = is_directed
         self.vertices_num = len(self.vertices)
 
     def print(self):
@@ -121,29 +143,48 @@ class incidence_matrix:
         return [i for i in range(self.vertices_num)]
 
     def regenerate_edges(self):
-        edges_list = []
-        for j in range(self.edges_num):
-            current_edge = []
-            weight = 1
-            for i in range(self.vertices_num):
-                if self.vertices[i][j] != 0:
-                    current_edge.append(i)
-                    weight = self.vertices[i][j]
-            edges_list.append(edge(current_edge, weight))
+        if self.is_directed:
+            edges_list = []
 
-        return edges_list
+            for j in range(self.edges_num):
+                current_edge = [0, 0]
+                weight = 1
+                for i in range(self.vertices_num):
+                    if self.vertices[i][j] < 0:
+                        current_edge[0] = i
+                    elif self.vertices[i][j] > 0:
+                        current_edge[1] = i
+                        weight = self.vertices[i][j]
+                edges_list.append(edge(current_edge, weight))
+
+            return edges_list
+        else:
+            edges_list = []
+            for j in range(self.edges_num):
+                current_edge = []
+                weight = 1
+                for i in range(self.vertices_num):
+                    if self.vertices[i][j] != 0:
+                        current_edge.append(i)
+                        weight = self.vertices[i][j]
+                edges_list.append(edge(current_edge, weight))
+
+            return edges_list
 
     def remove_edge(self, e):
-        if e >= self.edges_num:
-            raise Exception("Edge does not exist")
+        if self.is_directed:
+            raise Exception("Not implemented for directed graphs.")
+        else:
+            if e >= self.edges_num:
+                raise Exception("Edge does not exist")
 
-        for i in range(self.vertices_num):
-            self.vertices[i][e] = 0
+            for i in range(self.vertices_num):
+                self.vertices[i][e] = 0
 
     def exchange_edges(self, edges):
         print(self.vertices)
         print(edges)
-        raise Exception
+        raise Exception("Not implemented.")
 
     def edge_exists(self, first_node, second_node):
         return self.to_adjacency_matrix().edge_exists(first_node, second_node)
