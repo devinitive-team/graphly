@@ -312,6 +312,7 @@ def components_r(nr, v, gT, comp):
 
 
 def kosaraju_algorithm(g):
+    # when all numbers in returned array are the same, digraph is strongly connected
     vert = g.get_nodes()
     d = [-1 for _ in range(len(vert))]
     f = [-1 for _ in range(len(vert))]
@@ -336,7 +337,7 @@ def kosaraju_algorithm(g):
 
 def bellman_ford_algorithm(g, source=0):
     """
-    :param g: weighted digraph
+    :param g: strongly connected weighted digraph
     :param source: a vertex which execution of algorithm is started, defaulted to 0
     :return: bool
     """

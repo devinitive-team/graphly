@@ -17,7 +17,8 @@ def generate(generation_type, *args):
         "k-regular": generate_k_regular,
         "eulerian": generate_eulerian,
         "random-connected": generate_random_connected,
-        "degree-seq": generate_from_degree_seq
+        "degree-seq": generate_from_degree_seq,
+        "strongly-connected-weighted-digraph": generate_strongly_connected_weighted_digraph
     }[generation_type](*args)
 
 
@@ -178,3 +179,15 @@ def generate_from_degree_seq(sequence):
             j += 1
 
     return graph(representation.adjacency_list(adj_list))
+
+
+def generate_strongly_connected_weighted_digraph(vertices_num, probability, weight_min, weight_max):
+    di_g = generate("probability-digraph", vertices_num, probability)
+
+    while len(set(algorithm.kosaraju_algorithm(di_g))) > 1:  # check if all numbers in array are the same
+        di_g = generate("probability-digraph", vertices_num, probability)
+
+    for e in di_g.get_edges():
+        e.set_weight(random.randint(weight_min, weight_max))
+
+    return di_g
