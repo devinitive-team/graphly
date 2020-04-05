@@ -367,8 +367,6 @@ def bellman_ford_algorithm(g, source=0):
 def johnson_algorithm(g):
     new_g, new_node = add_s(g)
     copy_weights(g, new_g)
-    new_g.plot_weighted("new_g.png")
-    g.plot_weighted("g.png")
 
     is_valid, d_s = bellman_ford_algorithm(new_g, new_node)
     if not is_valid:
@@ -388,9 +386,7 @@ def johnson_algorithm(g):
     for u in g.get_nodes():
         D[u].extend(0 for _ in g.get_nodes())
         d_u = dijkstra_algorithm(g, u)
-        print(d_u)
-        print(u, v)
-        print(h)
+
         for v in g.get_nodes():
             D[u][v] = d_u[v] - h[u] + h[v]
 

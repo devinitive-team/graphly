@@ -41,10 +41,9 @@ class digraph:
         return self.edges
 
     def get_edge(self, first_vertex, second_vertex):
-        smaller, bigger = sorted([first_vertex, second_vertex])
         for e in self.edges:
             u, v = e.edge_tuple
-            if u == smaller and v == bigger or u == bigger and v == smaller:
+            if u == first_vertex and v == second_vertex:
                 return e
 
         raise Exception("Edge not found")
