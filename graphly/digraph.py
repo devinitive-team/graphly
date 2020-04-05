@@ -56,6 +56,9 @@ class digraph:
     def edge_exists(self, first_node, second_node):
         return self.graph_representation.edge_exists(first_node, second_node)
 
+    def copy(self):
+        return digraph(self.graph_representation.copy())
+
     def get_adjacency_list(self):
         return self.graph_representation.to_adjacency_list()
 

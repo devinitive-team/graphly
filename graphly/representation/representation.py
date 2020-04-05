@@ -21,6 +21,9 @@ class adjacency_list:
     def remove_edge(self, e):
         return self.to_incidence_matrix().remove_edge(e)
 
+    def copy(self):
+        return adjacency_list(self.vertices[:], self.is_directed)
+
     def exchange_edges(self, edges):
         if edges[1][1] not in self.vertices[edges[0][0]] and edges[1][0] not in self.vertices[edges[0][1]]:
             self.vertices[edges[0][0]].append(edges[1][1])

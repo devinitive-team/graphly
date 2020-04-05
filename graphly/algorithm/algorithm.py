@@ -6,6 +6,7 @@ import math
 from graphly.graph import graph
 from graphly.digraph import digraph
 from graphly.representation import representation
+from graphly.edge import edge
 
 
 def is_degree_seq(sequence):
@@ -358,6 +359,64 @@ def bellman_ford_algorithm(g, source=0):
         u, v = e.get_tuple()
         weight = g.get_edge(u, v).get_weight()
         if d_s[v] > d_s[u] + weight:
-            return False
+            return False, d_s
 
-    return True
+    return True, d_s
+
+
+def johnson_algorithm(g):
+    new_g, new_node = add_s(g)
+    copy_weights(g, new_g)
+    new_g.plot_weighted("new_g.png")
+    g.plot_weighted("g.png")
+
+    is_valid, d_s = bellman_ford_algorithm(new_g, new_node)
+    if not is_valid:
+        raise Exception("Istnieje cykl o ujemnej wadze!")
+
+    h = [0 for _ in range(new_node + 1)]
+    for v in new_g.get_nodes():
+        h[v] = d_s[v]
+
+    for e in new_g.get_edges():
+        u, v = e.get_tuple()
+        e.set_weight(e.get_weight() + h[u] - h[v])
+
+    copy_weights(new_g, g)
+
+    D = [[] for _ in g.get_nodes()]
+    for u in g.get_nodes():
+        D[u].extend(0 for _ in g.get_nodes())
+        d_u = dijkstra_algorithm(g, u)
+        print(d_u)
+        print(u, v)
+        print(h)
+        for v in g.get_nodes():
+            D[u][v] = d_u[v] - h[u] + h[v]
+
+    return D
+
+
+def add_s(g):
+    new_g = g.copy()
+
+    new_node = len(g.get_nodes())
+    new_g.get_nodes().append(new_node)
+    new_g.get_vertices().append([])
+
+    for node in new_g.get_nodes():
+        if node == new_node:
+            continue
+        new_g.get_edges().append(edge((new_node, node), 0))
+        new_g.get_vertices()[new_node].append(node)
+
+    return new_g, new_node
+
+
+def copy_weights(g_from, g_to):
+    for e in g_to.get_edges():
+        u, v = e.get_tuple()
+        try:
+            e.set_weight(g_from.get_edge(u, v).get_weight())
+        except:
+            pass
