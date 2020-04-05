@@ -350,14 +350,14 @@ def bellman_ford_algorithm(g, source=0):
     for _ in range(vertex_count - 1):
         for e in g.get_edges():
             u, v = e.get_tuple()
-            weight = g.get_edge(u, v).get_weight()
+            weight = e.get_weight()
             if d_s[v] > d_s[u] + weight:
                 d_s[v] = d_s[u] + weight
                 p_s[v] = u
 
     for e in g.get_edges():
         u, v = e.get_tuple()
-        weight = g.get_edge(u, v).get_weight()
+        weight = e.get_weight()
         if d_s[v] > d_s[u] + weight:
             return False, d_s
 
