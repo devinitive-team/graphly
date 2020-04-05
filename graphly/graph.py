@@ -35,9 +35,8 @@ class graph:
         return self.edges
 
     def get_edge(self, first_vertex, second_vertex):
-        smaller, bigger = sorted([first_vertex, second_vertex])
         for e in self.edges:
-            if e.edge_tuple[0] == smaller and e.edge_tuple[1] == bigger:
+            if first_vertex in e.edge_tuple and second_vertex in e.edge_tuple:
                 return e
 
         raise Exception("Edge not found")
