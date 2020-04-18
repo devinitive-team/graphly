@@ -2,6 +2,7 @@ import random
 import itertools
 import copy
 import math
+import copy
 
 from graphly.graph import graph
 from graphly.digraph import digraph
@@ -416,3 +417,34 @@ def copy_weights(g_from, g_to):
             e.set_weight(g_from.get_edge(u, v).get_weight())
         except:
             pass
+
+
+def ford_fulkerson(g, s, t):
+    gf = copy.deepcopy(g)
+
+    for e in gf.get_edges():
+        e.set_capacity(0)
+
+    print(bfs(gf, s))
+
+
+
+def bfs(g, s):
+    d_s = [math.inf for _ in range(len(g.get_nodes()))]
+    p_s = [None for _ in range(len(g.get_nodes()))]
+
+    d_s[s] = 0
+
+    Q = [s]
+    while Q:
+        v = Q.pop()
+        neighbours = [n.edge_tuple[1] for n in list(filter(lambda x: x.edge_tuple[0] == v, g.get_edges()))]
+        for u in neighbours:
+            if d_s[u] == math.inf:
+                d_s[u] = d_s[v] + 1
+                p_s[u] = v
+                Q.append(u)
+
+
+    return p_s
+
