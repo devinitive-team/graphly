@@ -75,24 +75,47 @@ def plot_weighted_digraph(digraph, name="digraph.png"):
     plt.clf()
 
 
-def plot_flow_digraph(flow_graph, name="flow_graph.png"):
-    g = nx.DiGraph()
-    colors = []
-    layers = flow_graph.get_layers()
-    colors_map = ['red', 'blue', 'yellow', 'brown', 'green', 'orange', 'pink', 'purple']
+def lerp(v0, v1, i):
+    return v0 + i * (v1 - v0)
 
-    for layer in flow_graph.get_layers():
+
+def get_equidistant_points(p1, p2, n):
+    return [[lerp(p1[0], p2[0], 1. / n * i), lerp(p1[1], p2[1], 1. / n * i)] for i in range(n)]
+
+
+def rgb_to_hex(rgb):
+    return '%02x%02x%02x' % rgb
+
+
+def plot_flow_digraph(digraph, name="digraph.png"):
+    g = nx.DiGraph()
+
+    edges = digraph.get_edges()
+    for e in edges:
+        g.add_edge(e.get_tuple()[0], e.get_tuple()[1], weight=e.get_capacity())
+
+    pos = {}
+    x_offset = 0
+    max_layer_size = max([len(layer) for layer in digraph.get_layers()])
+    for layer in digraph.get_layers():
+        points = get_equidistant_points((x_offset, 0), (x_offset, max_layer_size), len(layer))
+
+        y_offset = 0
+        if len(layer) < max_layer_size:
+            y_offset = (max_layer_size - 1 - points[len(points) - 1][1]) / 2.0
+
+        i = 0
         for node in layer:
             g.add_node(node.index)
-            colors.append(colors_map[layers.index(layer)])
+            x, y = points[i]
+            pos[node.index] = (x, y + y_offset)
+            i += 1
+        x_offset += 1
 
-    edges = flow_graph.get_edges()
-    for e in edges:
-        g.add_edge(e.get_tuple()[0], e.get_tuple()[1], weight=e.get_capacity(), color='red')
-    pos = nx.circular_layout(g)
+    nx.draw_networkx(g, pos)
     labels = nx.get_edge_attributes(g, "weight")
+    nx.draw_networkx(g, pos)
     nx.draw_networkx_edge_labels(g, pos, edge_labels=labels)
-    nx.draw_networkx(g, pos, node_color=colors)
     plt.savefig(name, format="png")
     plt.clf()
 
