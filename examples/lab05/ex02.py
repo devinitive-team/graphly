@@ -8,8 +8,11 @@ g = generator.generate("flow-network", 2)
 # for e in g.get_edges():
 #     e.set_flow(random.randint(0, e.get_capacity()))
 
-gg, c_f = algorithm.ford_fulkerson(g, 0, 1)
-print(c_f)
+gg = algorithm.ford_fulkerson(g, 0, 1)
+plotter.plot_flow_digraph(gg, 'ex02g.png')
 
-plotter.plot_flow_digraph(g, 'ex02g.png')
-plotter.plot_flow_digraph(gg, 'ex02.png')
+for e in gg.get_edges():
+    print(f"edge: {e.get_tuple()}")
+    print(f"flow: {e.get_flow()} ")
+    print(f"capacity: {e.get_capacity()}\n")
+
