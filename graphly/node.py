@@ -1,5 +1,5 @@
 class node:
-    def __init__(self, index, visited=False):
+    def __init__(self, index: object = None, visited: object = False):
         self.index = index
         self.visited = visited
 
@@ -7,9 +7,7 @@ class node:
         return str(self)
 
     def __str__(self):
-        return "index: {index}, visited: {visited}".format(
-            index=self.index,
-            visited=self.visited)
+        return f"(index: {self.index}, visited: {self.visited})"
 
     def get_index(self):
         return self.index

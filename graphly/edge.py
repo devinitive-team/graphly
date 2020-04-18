@@ -8,11 +8,7 @@ class edge:
         return str(self)
 
     def __str__(self):
-        return "edge: ({e0}, {e1}), weight: {weight}, visited: {visited}".format(
-            e0=self.edge_tuple[0],
-            e1=self.edge_tuple[1],
-            weight=self.weight,
-            visited=self.visited)
+        return f"edge: ({self.edge_tuple[0]}, {self.edge_tuple[1]}), weight: {self.weight}, visited: {self.visited}"
 
     def get_weight(self):
         return self.weight

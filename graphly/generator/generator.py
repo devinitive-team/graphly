@@ -7,6 +7,8 @@ from graphly.graph import graph
 from graphly.digraph import digraph
 from graphly.representation import representation
 from graphly.algorithm import algorithm
+from graphly.node import node
+from graphly.edge import edge
 
 
 def generate(generation_type, *args):
@@ -18,7 +20,8 @@ def generate(generation_type, *args):
         "eulerian": generate_eulerian,
         "random-connected": generate_random_connected,
         "degree-seq": generate_from_degree_seq,
-        "strongly-connected-weighted-digraph": generate_strongly_connected_weighted_digraph
+        "strongly-connected-weighted-digraph": generate_strongly_connected_weighted_digraph,
+        "flow-network": generate_flow_network
     }[generation_type](*args)
 
 
@@ -191,3 +194,48 @@ def generate_strongly_connected_weighted_digraph(vertices_num, probability, weig
         e.set_weight(random.randint(weight_min, weight_max))
 
     return di_g
+
+
+def generate_flow_network(layers_num):
+    # generate s, t
+    layers = [[] for _ in range(layers_num + 2)]
+
+    # s
+    layers[0].append(node(0))
+
+    # t
+    layers[layers_num + 1].append(node(1))
+
+    node_index = 2
+    for i in range(1, layers_num + 1):
+        vertices_num = random.randint(2, layers_num)
+        for _ in range(vertices_num):
+            layers[i].append(node(node_index))
+            node_index += 1
+
+    edges = []
+    for i in range(0, len(layers) - 1):
+        nodes_to_connect = layers[i + 1].copy()
+        random.shuffle(nodes_to_connect)
+        if len(layers[i]) < len(layers[i + 1]):
+            layers_copy = layers[i].copy() + [random.choice(layers[i]) for _ in
+                                              range(len(layers[i + 1]) - len(layers[i]))]
+
+            j = 0
+            for n in layers_copy:
+                edges.append(edge((n.index, nodes_to_connect[j].index)))
+                j += 1
+        else:
+            nodes_to_connect += [random.choice(nodes_to_connect) for _ in range(len(layers[i]) - len(nodes_to_connect))]
+            j = 0
+            for n in layers[i]:
+                edges.append(edge((n.index, nodes_to_connect[j].index)))
+                j += 1
+
+    nodes = [item for layer in layers for item in layer]
+
+    # for every vertex in network generate edges
+    # for each edge generate capacity
+
+    return digraph.from_nodes_edges(nodes, edges)
+

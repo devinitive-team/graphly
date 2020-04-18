@@ -1,6 +1,7 @@
 from graphly.reader import reader
 from graphly.plotter import plotter
-from graphly import edge
+from graphly.representation import representation
+
 
 class digraph:
     def __init__(self, graph_representation):
@@ -14,6 +15,18 @@ class digraph:
     @classmethod
     def from_file(cls, filepath):
         return cls(reader.read(filepath))
+
+    @classmethod
+    def from_nodes_edges(cls, nodes, edges):
+        adj_list = [[] for _ in range(len(nodes))]
+
+        for e in edges:
+            u, v = e.get_tuple()
+            adj_list[u].append(v)
+
+        print(adj_list)
+
+        return cls(representation.adjacency_list(adj_list, True))
 
     def print(self):
         self.graph_representation.print()
