@@ -421,11 +421,21 @@ def copy_weights(g_from, g_to):
 
 def ford_fulkerson(g, s, t):
     gf = copy.deepcopy(g)
+    for e in gf.get_edges():
+
+        pass
 
     for e in gf.get_edges():
         e.set_capacity(0)
 
-    print(bfs(gf, s))
+    path = bfs(gf, s)
+    while path:
+        path = [gf.get_edge(*e) for e in path]
+
+        print(path)
+
+        path = bfs(gf, s)
+        pass
 
 
 
@@ -445,6 +455,11 @@ def bfs(g, s):
                 p_s[u] = v
                 Q.append(u)
 
+    path = [(p_s[1], 1)]
+    while path[-1][0] != 0:
+        path.append((p_s[p_s[path[-1][1]]], p_s[path[-1][1]]))
 
-    return p_s
+
+    path.reverse()
+    return path
 
