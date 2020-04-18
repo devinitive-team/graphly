@@ -6,6 +6,7 @@ import copy
 
 from graphly.graph import graph
 from graphly.digraph import digraph
+from graphly.flow_graph import flow_graph
 from graphly.representation import representation
 from graphly.edge import edge
 
@@ -154,7 +155,7 @@ def is_edge_bridge(graph, edge):
         raise Exception
 
     graph_copy = copy.deepcopy(graph)
-    graph_copy.remove_edge(edge)
+    graph_copy.remove_edge_by_index(edge)
     return not is_connected(graph_copy)
 
 
@@ -420,23 +421,30 @@ def copy_weights(g_from, g_to):
 
 
 def ford_fulkerson(g, s, t):
-    gf = copy.deepcopy(g)
-    for e in gf.get_edges():
 
-        pass
+    for e in g.get_edges():
+        e.set_flow(0)
 
-    for e in gf.get_edges():
-        e.set_capacity(0)
+    gf = generate_gf(g)
 
     path = bfs(gf, s)
     while path:
+        gf.print()
         path = [gf.get_edge(*e) for e in path]
-
         print(path)
-
+        c_f = min([e.get_residual_capacity() for e in path])
+        for i in range(len(path)):
+            try:
+                u, v = path[i].get_tuple()
+                edg = g.get_edge(u, v)
+                edg.set_flow(edg.get_flow() + c_f)
+            except:
+                u, v = path[i].get_tuple()
+                edg = g.get_edge(v, u)
+                edg.set_flow(edg.get_flow() - c_f)
+        gf = generate_gf(g)
         path = bfs(gf, s)
-        pass
-
+    return g
 
 
 def bfs(g, s):
@@ -459,7 +467,24 @@ def bfs(g, s):
     while path[-1][0] != 0:
         path.append((p_s[p_s[path[-1][1]]], p_s[path[-1][1]]))
 
-
     path.reverse()
     return path
 
+
+def generate_gf(g):
+
+    gf = copy.deepcopy(g)
+    edges_copy = copy.deepcopy(gf.get_edges())
+    for e in edges_copy:
+        # print(e.get_flow(), end=" ")
+        residual_capacity = e.get_capacity() - e.get_flow()
+        if residual_capacity > 0:
+            gf.get_edge(*e.get_tuple()).set_residual_capacity(residual_capacity)
+            u, v = e.get_tuple()
+            gf.add_edge(edge((v, u), residual_capacity=e.get_flow()))
+
+    for e in gf.get_edges():
+        if e.get_residual_capacity == 0:
+            gf.remove_edge(e)
+    # print()
+    return gf

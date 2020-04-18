@@ -59,9 +59,15 @@ class digraph:
 
         raise Exception("Edge not found")
 
-    def remove_edge(self, e):
-        self.graph_representation.remove_edge(e)
+    def remove_edge_by_index(self, e_index):
+        self.graph_representation.remove_edge_by_index(e_index)
         self.edges = self.graph_representation.regenerate_edges()
+
+    def remove_edge(self, e):
+        self.edges.remove(e)
+
+    def add_edge(self, e):
+        self.edges.append(e)
 
     def edge_exists(self, first_node, second_node):
         return self.graph_representation.edge_exists(first_node, second_node)

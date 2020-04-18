@@ -42,7 +42,7 @@ class graph:
         raise Exception("Edge not found")
 
     def remove_edge(self, e):
-        self.graph_representation.remove_edge(e)
+        self.graph_representation.remove_edge_by_index(e)
         self.edges = self.graph_representation.regenerate_edges()
 
     def edge_exists(self, first_node, second_node):

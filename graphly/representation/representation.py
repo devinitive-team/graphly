@@ -175,14 +175,11 @@ class incidence_matrix:
             return edges_list
 
     def remove_edge(self, e):
-        if self.is_directed:
-            raise Exception("Not implemented for directed graphs.")
-        else:
-            if e >= self.edges_num:
-                raise Exception("Edge does not exist")
+        if e >= self.edges_num:
+            raise Exception("Edge does not exist")
 
-            for i in range(self.vertices_num):
-                self.vertices[i][e] = 0
+        for i in range(self.vertices_num):
+            self.vertices[i][e] = 0
 
     def exchange_edges(self, edges):
         print(self.vertices)
