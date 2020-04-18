@@ -9,6 +9,9 @@ class node:
     def __str__(self):
         return f"(index: {self.index}, visited: {self.visited})"
 
+    def __eq__(self, other):
+        return self.index == other.index and self.visited == other.visited
+
     def get_index(self):
         return self.index
 

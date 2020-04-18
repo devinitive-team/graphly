@@ -248,8 +248,11 @@ def generate_flow_network(layers_num):
                 edges.append(edge((u.index, v.index)))
                 break
 
-    # for each edge generate capacity
-    for e in edges:
+    # generate digraph
+    di_g = digraph.from_nodes_edges(nodes, edges)
+
+    # generate capacity for each edge
+    for e in di_g.get_edges():
         e.set_capacity(random.randint(1, 10))
 
-    return digraph.from_nodes_edges(nodes, edges)
+    return di_g
