@@ -5,6 +5,7 @@ from operator import itemgetter
 
 from graphly.graph import graph
 from graphly.digraph import digraph
+from graphly.flow_graph import flow_graph
 from graphly.representation import representation
 from graphly.algorithm import algorithm
 from graphly.node import node
@@ -33,11 +34,11 @@ def generate_regular(vertices_num, edges_num):
     adj_list = [[] for _ in range(vertices_num)]
     i = 0
     while i < edges_num:
-        edge = random.sample(range(vertices_num), 2)
-        if edge[1] in adj_list[edge[0]]:
+        e = random.sample(range(vertices_num), 2)
+        if e[1] in adj_list[e[0]]:
             continue
-        adj_list[edge[0]].append(edge[1])
-        adj_list[edge[1]].append(edge[0])
+        adj_list[e[0]].append(e[1])
+        adj_list[e[1]].append(e[0])
 
         i += 1
 
@@ -122,16 +123,16 @@ def generate_random_pair(edge_list, points):
         if point == points[index]:
             continue
 
-        edge = (point, points[index])
-        if edge in edge_list:
+        e = (point, points[index])
+        if e in edge_list:
             continue
 
         reversed_edge_list = [t[::-1] for t in edge_list]
-        if edge in reversed_edge_list:
+        if e in reversed_edge_list:
             continue
 
         points.pop(index)
-        edge_list.append(edge)
+        edge_list.append(e)
         return 0
 
 
@@ -236,9 +237,6 @@ def generate_flow_network(layers_num):
 
     nodes = [item for layer in layers for item in layer]
 
-    print(nodes)
-    print(edges)
-
     # generate 2N additional edges
     for _ in range(2 * layers_num):
         while True:
@@ -249,10 +247,12 @@ def generate_flow_network(layers_num):
                 break
 
     # generate digraph
-    di_g = digraph.from_nodes_edges(nodes, edges)
+    flow_g = flow_graph.from_nodes_edges(nodes, edges)
 
     # generate capacity for each edge
-    for e in di_g.get_edges():
+    for e in flow_g.get_edges():
         e.set_capacity(random.randint(1, 10))
 
-    return di_g
+    flow_g.set_layers(layers)
+
+    return flow_g
