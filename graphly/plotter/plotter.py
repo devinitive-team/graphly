@@ -88,8 +88,10 @@ def plot_flow_digraph(flow_graph, name="flow_graph.png"):
 
     edges = flow_graph.get_edges()
     for e in edges:
-        g.add_edge(e.get_tuple()[0], e.get_tuple()[1], weight=e.get_weight(), color='red')
+        g.add_edge(e.get_tuple()[0], e.get_tuple()[1], weight=e.get_capacity(), color='red')
     pos = nx.circular_layout(g)
+    labels = nx.get_edge_attributes(g, "weight")
+    nx.draw_networkx_edge_labels(g, pos, edge_labels=labels)
     nx.draw_networkx(g, pos, node_color=colors)
     plt.savefig(name, format="png")
     plt.clf()
