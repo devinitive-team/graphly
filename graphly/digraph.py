@@ -24,8 +24,6 @@ class digraph:
             u, v = e.get_tuple()
             adj_list[u].append(v)
 
-        print(adj_list)
-
         return cls(representation.adjacency_list(adj_list, True))
 
     def print(self):

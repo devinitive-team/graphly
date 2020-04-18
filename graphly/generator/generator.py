@@ -206,6 +206,7 @@ def generate_flow_network(layers_num):
     # t
     layers[layers_num + 1].append(node(1))
 
+    # generate layers
     node_index = 2
     for i in range(1, layers_num + 1):
         vertices_num = random.randint(2, layers_num)
@@ -213,6 +214,7 @@ def generate_flow_network(layers_num):
             layers[i].append(node(node_index))
             node_index += 1
 
+    # connect layers
     edges = []
     for i in range(0, len(layers) - 1):
         nodes_to_connect = layers[i + 1].copy()
@@ -234,8 +236,20 @@ def generate_flow_network(layers_num):
 
     nodes = [item for layer in layers for item in layer]
 
-    # for every vertex in network generate edges
+    print(nodes)
+    print(edges)
+
+    # generate 2N additional edges
+    for _ in range(2 * layers_num):
+        while True:
+            u, v = random.sample(nodes, 2)
+            if edge((u.index, v.index)) not in edges and edge(
+                    (v.index, u.index)) not in edges and u.index != 1 and v.index != 0:
+                edges.append(edge((u.index, v.index)))
+                break
+
     # for each edge generate capacity
+    for e in edges:
+        e.set_capacity(random.randint(1, 10))
 
     return digraph.from_nodes_edges(nodes, edges)
-
