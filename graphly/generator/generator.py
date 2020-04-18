@@ -198,6 +198,9 @@ def generate_strongly_connected_weighted_digraph(vertices_num, probability, weig
 
 
 def generate_flow_network(layers_num):
+    if layers_num < 2:
+        raise Exception("Layers number must be more than 2")
+
     # generate s, t
     layers = [[] for _ in range(layers_num + 2)]
 
