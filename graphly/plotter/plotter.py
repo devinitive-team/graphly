@@ -75,21 +75,22 @@ def plot_weighted_digraph(digraph, name="digraph.png"):
     plt.clf()
 
 
-def plot_flow_digraph(digraph, name="digraph.png"):
+def plot_flow_digraph(flow_graph, name="flow_graph.png"):
     g = nx.DiGraph()
+    colors = []
+    layers = flow_graph.get_layers()
+    colors_map = ['red', 'blue', 'yellow', 'brown', 'green', 'orange', 'pink', 'purple']
 
-    for node in digraph.get_nodes():
-        g.add_node(node)
+    for layer in flow_graph.get_layers():
+        for node in layer:
+            g.add_node(node.index)
+            colors.append(colors_map[layers.index(layer)])
 
-    edges = digraph.get_edges()
+    edges = flow_graph.get_edges()
     for e in edges:
-        g.add_edge(e.get_tuple()[0], e.get_tuple()[1], weight=e.get_capacity())
-
+        g.add_edge(e.get_tuple()[0], e.get_tuple()[1], weight=e.get_weight(), color='red')
     pos = nx.circular_layout(g)
-    nx.draw_networkx(g, pos)
-    labels = nx.get_edge_attributes(g, "weight")
-    nx.draw_networkx_edge_labels(g, pos, edge_labels=labels)
-
+    nx.draw_networkx(g, pos, node_color=colors)
     plt.savefig(name, format="png")
     plt.clf()
 
