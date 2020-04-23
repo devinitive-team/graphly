@@ -15,7 +15,7 @@ g = graph.from_file("data/adjacency_list_graph.json")
 
 g.print()
 print()
-g.graph_representation.to_incidence_matrix().print()
+g.graph_representation.to_adjacency_matrix().print()
 print()
 g.graph_representation.to_incidence_matrix().print()
 
