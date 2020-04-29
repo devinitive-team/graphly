@@ -159,43 +159,115 @@ def is_edge_bridge(graph, edge):
     return not is_connected(graph_copy)
 
 
-def find_eulerian_circuit(graph):
+def dfs_count(edges, v, visited):
+    count = 1
+    visited[v] = True
+
+    adjacent_nodes = []
+    for e in edges:
+        curr_u, curr_v = e
+        if curr_u == v:
+            adjacent_nodes.append(curr_v)
+        elif curr_v == v:
+            adjacent_nodes.append(curr_u)
+
+    for i in adjacent_nodes:
+        if not visited[i]:
+            count = count + dfs_count(edges, i, visited)
+    return count
+
+
+def is_valid_next_edge(edges, vertices_num, u, v):
+    adjacent_nodes = []
+    for e in edges:
+        curr_u, curr_v = e
+        if curr_u == u:
+            adjacent_nodes.append(curr_v)
+        elif curr_v == u:
+            adjacent_nodes.append(curr_u)
+
+    if len(adjacent_nodes) == 1:
+        return True
+    else:
+        visited = [False] * vertices_num
+        count1 = dfs_count(edges, u, visited)
+
+        try:
+            edges.remove((u, v))
+            edges.remove((v, u))
+        except:
+            pass
+
+        visited = [False] * vertices_num
+        count2 = dfs_count(edges, u, visited)
+
+        edges.append((u, v))
+
+    return False if count1 > count2 else True
+
+
+def print_euler_util(u, nodes, edges):
+    adjacent_nodes = []
+    for e in edges:
+        curr_u, curr_v = e
+        if curr_u == u:
+            adjacent_nodes.append(curr_v)
+        elif curr_v == u:
+            adjacent_nodes.append(curr_u)
+
+    for v in adjacent_nodes:
+        if is_valid_next_edge(edges, len(nodes), u, v):
+            print("%d-%d " % (u, v))
+            try:
+                edges.remove((u, v))
+                edges.remove((v, u))
+            except:
+                pass
+            print_euler_util(v, nodes, edges)
+
+
+def find_eulerian_circuit(g):
     """
-    :param graph
+    :param g graph
     :return: eulerian circuit as an array of integers
     """
-    if not is_eulerian(graph):
+    if not is_eulerian(g):
         raise Exception
 
-    graph.set_representation("adjacency_list")
+    g_dict = {}
+    for e in g.get_edges():
+        u, v = e.get_tuple()
+        g_dict[u].append(v)
+        g_dict[v].append(u)
 
-    edge_count = dict()
 
-    for i in range(len(graph.get_vertices())):
-        edge_count[i] = len(graph.get_vertices()[i])
+    # nodes = g.get_nodes()
+    # edges = [(e.get_tuple()[0], e.get_tuple()[1]) for e in g.get_edges()]
 
-    eulerian_circuit = []
-    current_path = []
-    current_vertex = 0
-    current_path.append(current_vertex)
+    u = 0
 
-    while len(current_path):
-        if edge_count[current_vertex]:
-            next_vertex = graph.get_vertices()[current_vertex][-1]
+    print_euler_util(u, nodes, edges)
 
-            edge_count[current_vertex] -= 1
-            graph.get_vertices()[current_vertex].pop()
-
-            current_vertex = next_vertex
-
-            current_path.append(current_vertex)
-        else:
-            eulerian_circuit.append(current_vertex)
-            current_vertex = current_path[-1]
-            current_path.pop()
-
-    eulerian_circuit.reverse()
-    return eulerian_circuit
+    # edges = [(e.get_tuple()[0], e.get_tuple()[1]) for e in g.get_edges()] + [(e.get_tuple()[1], e.get_tuple()[0]) for e
+    #                                                                          in g.get_edges()]
+    # permutations = list(itertools.permutations(edges))
+    #
+    # for permutation in permutations:
+    #     valid = True
+    #     for i in range(len(permutation) - 1):
+    #         if not (permutation[i][1] == permutation[i + 1][0] or permutation[i][0] == permutation[i + 1][1]):
+    #             valid = False
+    #             break
+    #
+    #     if valid:
+    #         temp = []
+    #         for i in range(len(permutation)):
+    #             if permutation[i] not in temp:
+    #                 temp.append((permutation[i][1], permutation[i][0]))
+    #
+    #         return temp
+    #
+    # return False
 
 
 def minimum_distance(g, d_s, S):
