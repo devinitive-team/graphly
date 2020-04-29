@@ -4,6 +4,7 @@ import copy
 import math
 import copy
 
+from collections import defaultdict
 from graphly.graph import graph
 from graphly.digraph import digraph
 from graphly.flow_graph import flow_graph
@@ -159,71 +160,48 @@ def is_edge_bridge(graph, edge):
     return not is_connected(graph_copy)
 
 
-def dfs_count(edges, v, visited):
+def remove_edge(g_dict, u, v):
+    for index, key in enumerate(g_dict[u]):
+        if key == v:
+            g_dict[u].pop(index)
+    for index, key in enumerate(g_dict[v]):
+        if key == u:
+            g_dict[v].pop(index)
+
+
+def dfs_count(v, visited, g_dict):
     count = 1
     visited[v] = True
-
-    adjacent_nodes = []
-    for e in edges:
-        curr_u, curr_v = e
-        if curr_u == v:
-            adjacent_nodes.append(curr_v)
-        elif curr_v == v:
-            adjacent_nodes.append(curr_u)
-
-    for i in adjacent_nodes:
+    for i in g_dict[v]:
         if not visited[i]:
-            count = count + dfs_count(edges, i, visited)
+            count = count + dfs_count(i, visited, g_dict)
     return count
 
 
-def is_valid_next_edge(edges, vertices_num, u, v):
-    adjacent_nodes = []
-    for e in edges:
-        curr_u, curr_v = e
-        if curr_u == u:
-            adjacent_nodes.append(curr_v)
-        elif curr_v == u:
-            adjacent_nodes.append(curr_u)
-
-    if len(adjacent_nodes) == 1:
+def is_valid_next_edge(u, v, g_dict, vertices_num):
+    if len(g_dict[u]) == 1:
         return True
     else:
         visited = [False] * vertices_num
-        count1 = dfs_count(edges, u, visited)
+        count1 = dfs_count(u, visited, g_dict)
 
-        try:
-            edges.remove((u, v))
-            edges.remove((v, u))
-        except:
-            pass
+        remove_edge(g_dict, u, v)
 
         visited = [False] * vertices_num
-        count2 = dfs_count(edges, u, visited)
+        count2 = dfs_count(u, visited, g_dict)
 
-        edges.append((u, v))
+        g_dict[u].append(v)
+        g_dict[v].append(u)
 
     return False if count1 > count2 else True
 
 
-def print_euler_util(u, nodes, edges):
-    adjacent_nodes = []
-    for e in edges:
-        curr_u, curr_v = e
-        if curr_u == u:
-            adjacent_nodes.append(curr_v)
-        elif curr_v == u:
-            adjacent_nodes.append(curr_u)
-
-    for v in adjacent_nodes:
-        if is_valid_next_edge(edges, len(nodes), u, v):
+def print_euler_util(u, g_dict, vertices_num):
+    for v in g_dict[u]:
+        if is_valid_next_edge(u, v, g_dict, vertices_num):
             print("%d-%d " % (u, v))
-            try:
-                edges.remove((u, v))
-                edges.remove((v, u))
-            except:
-                pass
-            print_euler_util(v, nodes, edges)
+            remove_edge(g_dict, u, v)
+            print_euler_util(v, g_dict, vertices_num)
 
 
 def find_eulerian_circuit(g):
@@ -234,40 +212,15 @@ def find_eulerian_circuit(g):
     if not is_eulerian(g):
         raise Exception
 
-    g_dict = {}
+    g_dict = defaultdict(list)
     for e in g.get_edges():
         u, v = e.get_tuple()
         g_dict[u].append(v)
         g_dict[v].append(u)
 
-
-    # nodes = g.get_nodes()
-    # edges = [(e.get_tuple()[0], e.get_tuple()[1]) for e in g.get_edges()]
-
     u = 0
 
-    print_euler_util(u, nodes, edges)
-
-    # edges = [(e.get_tuple()[0], e.get_tuple()[1]) for e in g.get_edges()] + [(e.get_tuple()[1], e.get_tuple()[0]) for e
-    #                                                                          in g.get_edges()]
-    # permutations = list(itertools.permutations(edges))
-    #
-    # for permutation in permutations:
-    #     valid = True
-    #     for i in range(len(permutation) - 1):
-    #         if not (permutation[i][1] == permutation[i + 1][0] or permutation[i][0] == permutation[i + 1][1]):
-    #             valid = False
-    #             break
-    #
-    #     if valid:
-    #         temp = []
-    #         for i in range(len(permutation)):
-    #             if permutation[i] not in temp:
-    #                 temp.append((permutation[i][1], permutation[i][0]))
-    #
-    #         return temp
-    #
-    # return False
+    print_euler_util(u, g_dict, len(g.get_nodes()))
 
 
 def minimum_distance(g, d_s, S):
