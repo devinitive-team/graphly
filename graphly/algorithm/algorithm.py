@@ -196,12 +196,12 @@ def is_valid_next_edge(u, v, g_dict, vertices_num):
     return False if count1 > count2 else True
 
 
-def print_euler_util(u, g_dict, vertices_num):
+def print_euler_node(u, g_dict, vertices_num):
     for v in g_dict[u]:
         if is_valid_next_edge(u, v, g_dict, vertices_num):
             print("%d-%d " % (u, v))
             remove_edge(g_dict, u, v)
-            print_euler_util(v, g_dict, vertices_num)
+            print_euler_node(v, g_dict, vertices_num)
 
 
 def find_eulerian_circuit(g):
@@ -220,7 +220,7 @@ def find_eulerian_circuit(g):
 
     u = 0
 
-    print_euler_util(u, g_dict, len(g.get_nodes()))
+    print_euler_node(u, g_dict, len(g.get_nodes()))
 
 
 def minimum_distance(g, d_s, S):

@@ -6,5 +6,3 @@ g = generator.generate("eulerian", 6)
 g.plot("ex04.png")
 
 algorithm.find_eulerian_circuit(g)
-
-
