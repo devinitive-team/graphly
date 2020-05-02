@@ -1,13 +1,19 @@
 from graphly.reader import reader
 from graphly.plotter import plotter
 from graphly.representation import representation
+import json
+
+import numpy as np
 
 
 class digraph:
-    def __init__(self, graph_representation):
-        self.graph_representation = graph_representation
-        self.edges = graph_representation.regenerate_edges()
-        self.nodes = graph_representation.regenerate_nodes()
+    def __init__(self, graph_representation = None, from_stochastic_matrix=False, data = None):
+        if not from_stochastic_matrix:
+            self.graph_representation = graph_representation
+            self.edges = graph_representation.regenerate_edges()
+            self.nodes = graph_representation.regenerate_nodes()
+        else:
+            self.data = data
 
     def transpose_edges(self):
         return [(e.edge_tuple[1], e.edge_tuple[0]) for e in self.edges]
@@ -15,6 +21,20 @@ class digraph:
     @classmethod
     def from_file(cls, filepath):
         return cls(reader.read(filepath))
+
+    @classmethod
+    def from_stochastic_matrix(cls, filepath):
+        with open(filepath) as json_file:
+            data = json.load(json_file)
+            data_format = data["format"]
+            vertices = []
+            for vertex in data["data"]:
+                vertices.append(vertex)
+
+        return cls(data=np.array(vertices), from_stochastic_matrix=True)
+
+    def get_as_numpy_array(self):
+        return self.data
 
     @classmethod
     def from_nodes_edges(cls, nodes, edges):

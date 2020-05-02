@@ -4,6 +4,8 @@ import copy
 import math
 import copy
 
+import numpy as np
+
 from collections import defaultdict
 from graphly.graph import graph
 from graphly.digraph import digraph
@@ -520,3 +522,31 @@ def generate_gf(g):
             gf.remove_edge(e)
 
     return gf
+
+
+def pagerank_iterative(M, num_iterations: int = 100, d: float = 0.15):
+    N = M.shape[1]
+    v = np.ones(N)
+    v = v / np.linalg.norm(v, 1)
+    M_hat = ((1 - d) * M + d / N)
+    for i in range(num_iterations):
+        v = M_hat @ v
+    return v
+
+
+def pagerank_surfer(M, num_iterations: int = 100, d: float = 0.15):
+    N = M.shape[1]
+    v = np.zeros(N)
+    current_node = random.randint(0, N - 1)
+    for i in range(num_iterations):
+        v[current_node] += 1
+        if random.random() < (1 - d):
+            next_nodes = np.array([], dtype=int)
+            for index, el in enumerate(M[:, current_node]):
+                if el != 0:
+                    next_nodes = np.append(next_nodes, np.int32(index))
+            current_node = np.random.choice(a=next_nodes, size=1)[0]
+        else:
+            current_node = random.randint(0, N - 1)
+
+    return v / num_iterations
