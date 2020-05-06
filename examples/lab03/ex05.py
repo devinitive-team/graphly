@@ -10,7 +10,7 @@ for e in g.get_edges():
     e.set_weight(random.randint(1, 10))
 
 print(g.get_edges())
-g.plot_weighted("ex01.png")
+g.plot_weighted("ex05_1.png")
 
-algorithm.prim_algorithm(g).plot_weighted("ex05.png")
+algorithm.prim_algorithm(g).plot_weighted("ex05_2.png")
 

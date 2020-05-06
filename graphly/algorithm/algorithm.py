@@ -306,7 +306,7 @@ def calculate_center(g):
     """
     distance_matrix = calculate_distance_matrix(g)
     distances = list(map(sum, zip(*distance_matrix)))  # sum of columns
-    return distances.index(max(distances))  # index of max value in list
+    return distances.index(min(distances))  # index of min value in list
 
 
 def calculate_minmax_center(g):
