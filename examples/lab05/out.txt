@@ -1,0 +1,110 @@
+edge: [0, 3]
+flow: 0
+capacity: 3
+
+edge: [0, 4]
+flow: 2
+capacity: 4
+
+edge: [0, 5]
+flow: 4
+capacity: 4
+
+edge: [0, 2]
+flow: 5
+capacity: 5
+
+edge: [2, 6]
+flow: 1
+capacity: 9
+
+edge: [2, 1]
+flow: 4
+capacity: 4
+
+edge: [3, 7]
+flow: 0
+capacity: 5
+
+edge: [4, 6]
+flow: 2
+capacity: 2
+
+edge: [5, 7]
+flow: 1
+capacity: 2
+
+edge: [5, 13]
+flow: 3
+capacity: 3
+
+edge: [6, 8]
+flow: 2
+capacity: 9
+
+edge: [6, 10]
+flow: 1
+capacity: 3
+
+edge: [7, 9]
+flow: 1
+capacity: 5
+
+edge: [7, 10]
+flow: 0
+capacity: 6
+
+edge: [8, 14]
+flow: 0
+capacity: 3
+
+edge: [8, 13]
+flow: 2
+capacity: 8
+
+edge: [8, 2]
+flow: 0
+capacity: 2
+
+edge: [9, 11]
+flow: 1
+capacity: 1
+
+edge: [10, 12]
+flow: 1
+capacity: 1
+
+edge: [11, 1]
+flow: 1
+capacity: 5
+
+edge: [12, 1]
+flow: 1
+capacity: 6
+
+edge: [12, 5]
+flow: 0
+capacity: 6
+
+edge: [12, 4]
+flow: 0
+capacity: 10
+
+edge: [13, 1]
+flow: 5
+capacity: 7
+
+edge: [13, 12]
+flow: 0
+capacity: 2
+
+edge: [14, 1]
+flow: 0
+capacity: 4
+
+edge: [14, 5]
+flow: 0
+capacity: 9
+
+
+Process finished with exit code 0

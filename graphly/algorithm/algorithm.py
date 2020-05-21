@@ -506,8 +506,6 @@ def generate_gf(g):
         residual_capacity = e.get_capacity() - e.get_flow()
         if residual_capacity > 0:
             gf.get_edge(*e.get_tuple()).set_residual_capacity(residual_capacity)
-            # u, v = e.get_tuple()
-            # gf.add_edge(edge((v, u), residual_capacity=e.get_flow()))
 
     for e in gf.get_edges():
         if e.get_residual_capacity() == 0:
